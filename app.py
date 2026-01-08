@@ -42,6 +42,7 @@ st.markdown("""
     .stat-item { text-align: center; font-size: 14px; color: #4b4f56; }
     .quote-box { font-style: italic; color: #4b4f56; border-left: 4px solid #adb9d3; padding-left: 12px; margin-bottom: 15px; }
     .faq-q { font-weight: bold; color: #adb9d3; margin-top: 10px; font-size: 15px; }
+    .price-tag { color: #2e7d32; font-size: 24px; font-weight: bold; margin: 10px 0; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -57,13 +58,11 @@ with col_left:
     st.markdown('<div class="section-header">Basic Information</div>', unsafe_allow_html=True)
     st.markdown('<div class="content-box"><b>Business:</b> Blast Hive.<br><b>Location:</b> Swansea, Sketty.</div>', unsafe_allow_html=True)
     
-    # RE-ADDED: Newsletter
     st.markdown('<div class="section-header">Join the Hive</div>', unsafe_allow_html=True)
     email_sub = st.text_input("Get updates via email:", placeholder="your@email.com")
     if st.button("Subscribe"):
         st.toast("Welcome to the Hive! 🐝")
 
-    # RE-ADDED: Contact Form
     st.markdown('<div class="section-header">Contact Our Team</div>', unsafe_allow_html=True)
     with st.expander("Send us a message"):
         contact_name = st.text_input("Name")
@@ -79,7 +78,6 @@ with col_left:
     </div>""", unsafe_allow_html=True)
 
 with col_right:
-    # UPDATED: Tabs now include FAQ
     tab1, tab2, tab3, tab4, tab5 = st.tabs(["📄 Info", "🖼️ Photos", "🎟️ Book Now!", "📅 My Bookings", "❓ FAQ"])
 
     # --- TAB 1: INFO ---
@@ -90,8 +88,10 @@ with col_right:
         
         st.markdown('<div class="section-header">Reviews & Quotes</div>', unsafe_allow_html=True)
         st.markdown("""<div class="content-box">
-            <div class="quote-box">"Best summer activity company in Swansea!" - Local Resident</div>
-            <div class="quote-box">"My son had an amazing time at the Extreme Impact Day." - Parent Review</div>
+            <div class="quote-box">"Best summer activity company in Swansea! The Skill Switch puzzles were brilliant." - Jamie L.</div>
+            <div class="quote-box">"My kids have never been so excited for a weekend. The Adrenaline Weekend was worth every penny." - Sarah M.</div>
+            <div class="quote-box">"Safe, professional, and genuinely fun. The Target Day is a must-do." - David K.</div>
+            <div class="quote-box">"Inclusive and welcoming. My son felt totally part of the team." - Parent Review</div>
             <div class="quote-box">"Ready, Aim, BLAST!" - Official Motto</div>
         </div>""", unsafe_allow_html=True)
 
@@ -108,7 +108,6 @@ with col_right:
                             st.session_state.photo_index = i
                             st.rerun()
         else:
-            # Scaled viewing window
             l_buf, mid_view, r_buf = st.columns([1, 1.5, 1])
             with mid_view:
                 idx = st.session_state.photo_index
@@ -124,8 +123,12 @@ with col_right:
         if st.session_state.booking_step == "select":
             evt = st.selectbox("Select Activity:", list(event_data.keys()))
             dt = st.selectbox("Choose Date:", event_data[evt])
+            
+            # CLEAR PRICE DISPLAY
+            st.markdown(f'<div class="price-tag">Price: £54.99 per person</div>', unsafe_allow_html=True)
+            
             if st.button("Confirm Booking"):
-                st.session_state.temp_booking = {"event": evt, "date": dt, "id": f"BH-{random.randint(1000, 9999)}"}
+                st.session_state.temp_booking = {"event": evt, "date": dt, "id": f"BH-{random.randint(1000, 9999)}", "price": "£54.99"}
                 st.session_state.booking_step = "confirm"
                 st.rerun()
         
@@ -149,20 +152,32 @@ with col_right:
             st.info("No active bookings found.")
         else:
             for i, b in enumerate(st.session_state.my_bookings):
-                st.markdown(f'<div class="content-box">🎯 <b>{b["event"]}</b><br>📅 Date: {b["date"]}<br>🆔 ID: {b["id"]}</div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="content-box">🎯 <b>{b["event"]}</b><br>📅 Date: {b["date"]}<br>💰 Cost: {b["price"]}<br>🆔 ID: {b["id"]}</div>', unsafe_allow_html=True)
                 if st.button(f"Cancel {b['id']}", key=f"del_{i}"):
                     st.session_state.my_bookings.pop(i); st.rerun()
 
-    # --- TAB 5: FAQ (NEW TAB) ---
+    # --- TAB 5: FAQ ---
     with tab5:
         st.markdown('<div class="section-header">Frequently Asked Questions</div>', unsafe_allow_html=True)
         st.markdown("""<div class="content-box">
             <p class="faq-q">Is all equipment provided?</p>
             <p>Yes, we provide all specialized gear. Just bring sturdy shoes!</p>
+            
             <p class="faq-q">What is the age range?</p>
             <p>Our main events are for ages 12-17. Check posters for junior sessions.</p>
+            
             <p class="faq-q">What happens if it rains?</p>
             <p>We use our indoor Sketty backup facilities for heavy weather.</p>
+            
             <p class="faq-q">Can I cancel my booking?</p>
             <p>Yes, you can manage and cancel bookings via the 'My Bookings' tab.</p>
+            
+            <p class="faq-q">What is included in the £54.99 price?</p>
+            <p>The price covers professional instruction, all equipment hire, and insurance for the day.</p>
+            
+            <p class="faq-q">Are there any physical requirements?</p>
+            <p>We are an all-inclusive company. Please message our team if you have specific accessibility needs!</p>
+            
+            <p class="faq-q">How do I find the meeting point in Sketty?</p>
+            <p>A full map and arrival guide are sent with every booking receipt.</p>
         </div>""", unsafe_allow_html=True)
