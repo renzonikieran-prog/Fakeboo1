@@ -5,7 +5,7 @@ import random
 # --- SYSTEM INITIALIZATION ---
 st.set_page_config(layout="wide", page_title="Blast Hive - Takebook")
 
-# Memory Management for Interactive Features
+# Initialize Session States for Memory
 if "photo_index" not in st.session_state:
     st.session_state.photo_index = None
 if "booking_step" not in st.session_state:
@@ -14,10 +14,12 @@ if "my_bookings" not in st.session_state:
     st.session_state.my_bookings = []
 if "user_reviews" not in st.session_state:
     st.session_state.user_reviews = []
-if "photo_likes" not in st.session_state:
-    st.session_state.photo_likes = [random.randint(50, 200) for _ in range(6)]
+
+# Expanded Social Data - Generating 20 unique counters for the feed
 if "post_likes" not in st.session_state:
-    st.session_state.post_likes = [random.randint(10, 100) for _ in range(3)]
+    st.session_state.post_likes = [random.randint(5, 250) for _ in range(20)]
+if "photo_likes" not in st.session_state:
+    st.session_state.photo_likes = [random.randint(50, 400) for _ in range(12)]
 
 # --- DATA MAPPING ---
 event_data = {
@@ -30,12 +32,18 @@ event_data = {
 }
 
 posters = [
-    ("target_day.jpg", "Target Day"),
-    ("adrenaline_weekend.jpg", "Adrenaline Weekend"),
-    ("ultimate_challenge.jpg", "Ultimate Challenge Day"),
-    ("social_play_fest.jpg", "Social Play Fest"),
-    ("extreme_impact.jpg", "Extreme Impact Day"),
-    ("skill_switch.jpg", "Skill Switch Experience")
+    ("target_day.jpg", "Target Day Poster"),
+    ("adrenaline_weekend.jpg", "Adrenaline Weekend Poster"),
+    ("ultimate_challenge.jpg", "Ultimate Challenge Day Poster"),
+    ("social_play_fest.jpg", "Social Play Fest Poster"),
+    ("extreme_impact.jpg", "Extreme Impact Day Poster"),
+    ("skill_switch.jpg", "Skill Switch Experience Poster"),
+    ("https://images.unsplash.com/photo-1506332800446-0fb3df09358a", "Bushcraft Skills Action"),
+    ("https://images.unsplash.com/photo-1599586120429-48281b6f0ece", "Laser Tag Teamwork"),
+    ("https://images.unsplash.com/photo-1551632811-561732d1e306", "Forest Survival Training"),
+    ("https://images.unsplash.com/photo-1517164850305-99a3e65bb47e", "Team Puzzle Challenge"),
+    ("https://images.unsplash.com/photo-1544367567-0f2fcb009e0b", "Archery Practice"),
+    ("https://images.unsplash.com/photo-1511949863663-92c5c06cc0bb", "Victory Celebration")
 ]
 
 # --- UI STYLING ---
@@ -48,7 +56,6 @@ st.markdown("""
     .post-card { border: 1px solid #dddfe2; background-color: white; padding: 20px; border-radius: 8px; margin-bottom: 10px; }
     .quote-box { font-style: italic; color: #4b4f56; border-left: 4px solid #adb9d3; padding-left: 12px; margin-bottom: 15px; }
     .price-tag { color: #2e7d32; font-size: 24px; font-weight: bold; margin: 10px 0; }
-    .faq-q { font-weight: bold; color: #adb9d3; margin-top: 10px; font-size: 15px; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -60,26 +67,11 @@ col_left, col_right = st.columns([1, 2.3])
 with col_left:
     if os.path.exists("image_83c146.jpg"):
         st.image("image_83c146.jpg", use_container_width=True)
-    
     st.markdown('<div class="section-header">Basic Information</div>', unsafe_allow_html=True)
     st.markdown('<div class="content-box"><b>Business:</b> Blast Hive.<br><b>Location:</b> Swansea, Sketty.</div>', unsafe_allow_html=True)
     
-    # Newsletter Section
     st.markdown('<div class="section-header">Join the Hive</div>', unsafe_allow_html=True)
-    email_sub = st.text_input("Newsletter Email:", placeholder="your@email.com")
-    if st.button("Subscribe"):
-        st.toast("Welcome to the Hive! 🐝")
-
-    # Contact Team Section
-    st.markdown('<div class="section-header">Contact Our Team</div>', unsafe_allow_html=True)
-    with st.expander("Send us a message"):
-        c_name = st.text_input("Your Name")
-        c_msg = st.text_area("Question")
-        if st.button("Submit Message"):
-            st.success(f"Thanks {c_name}! Message sent.")
-
-    st.markdown('<div class="section-header">Likes</div>', unsafe_allow_html=True)
-    st.markdown("""<div class="content-box">👍 Adventure Sports Wales<br>👍 Gower Activity Centres<br>👍 Swansea Youth Hub</div>""", unsafe_allow_html=True)
+    if st.button("Subscribe to Newsletter"): st.toast("Welcome to the Hive! 🐝")
 
 with col_right:
     tab1, tab_posts, tab2, tab3, tab4, tab5 = st.tabs(["📄 Info", "📰 Posts", "🖼️ Photos", "🎟️ Book Now!", "📅 My Bookings", "❓ FAQ"])
@@ -88,88 +80,85 @@ with col_right:
     with tab1:
         st.markdown('<div class="stat-bar"><div class="stat-item"><b>1.4k</b><br>Followers</div><div class="stat-item"><b>920</b><br>Reviews</div><div class="stat-item"><b>4.9 ⭐</b><br>Rating</div></div>', unsafe_allow_html=True)
         with st.expander("⭐ Add a Review"):
-            rev_name = st.text_input("Name", key="rev_n")
-            rev_text = st.text_area("Review", key="rev_t")
+            rev_name = st.text_input("Name")
+            rev_stars = st.select_slider("Rating", options=["⭐", "⭐⭐", "⭐⭐⭐", "⭐⭐⭐⭐", "⭐⭐⭐⭐⭐"], value="⭐⭐⭐⭐⭐")
+            rev_text = st.text_area("How was your day?")
             if st.button("Post Review"):
-                st.session_state.user_reviews.insert(0, {"name": rev_name, "text": rev_text})
-                st.rerun()
-        
-        st.markdown('<div class="section-header">About Us</div>', unsafe_allow_html=True)
-        st.markdown('<div class="content-box">We are Blast Hive, an all-inclusive company offering exciting days out in Swansea...</div>', unsafe_allow_html=True)
-        
+                if rev_name and rev_text:
+                    st.session_state.user_reviews.insert(0, {"name": rev_name, "text": rev_text, "stars": rev_stars})
+                    st.rerun()
         st.markdown('<div class="section-header">Reviews & Quotes</div>', unsafe_allow_html=True)
         for r in st.session_state.user_reviews:
-            st.markdown(f'<div class="quote-box">"{r["text"]}" - {r["name"]} (Latest)</div>', unsafe_allow_html=True)
-        st.markdown('<div class="quote-box">"Best summer activity company in Swansea!" - Parent Review</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="quote-box">{r["stars"]} "{r["text"]}" - {r["name"]}</div>', unsafe_allow_html=True)
 
-    # --- TAB: POSTS ---
+    # --- TAB: THE MASSIVE POSTS FEED ---
     with tab_posts:
-        st.markdown('<div class="section-header">Recent Updates</div>', unsafe_allow_html=True)
-        feed = [("Target Day gear is here! Ready for Airsoft? 🔫", 0), ("Our indoor backup in Sketty is ready for rain! 🌧️", 1)]
-        for text, p_idx in feed:
+        st.markdown('<div class="section-header">Blast Hive Social Feed</div>', unsafe_allow_html=True)
+        # 20 Unique Community Posts
+        feed_content = [
+            "Target Day equipment just arrived! Who's ready for Airsoft? 🔫",
+            "Indoor Sketty backup facilities are ready for the rain! 🌧️",
+            "New 'Skill Switch' puzzles are being tested today. 🧩",
+            "Shoutout to last week's winners - pure teamwork! 🙌",
+            "Bushcraft survival sessions added to the Sept calendar. 🌲",
+            "Group offer: Book for 5 friends and get a free hoodie! 👕",
+            "Safety first! Check our new briefing video. 📹",
+            "Extreme Impact Day is 90% booked. Grab your spots! 🏃",
+            "Lost bottle found at the Sketty desk. 🍼",
+            "Ready, Aim, BLAST! See you all this weekend. 🐝",
+            "The new archery range is officially open! 🏹",
+            "Behind the scenes: Prepping for the Ultimate Challenge. 🛠️",
+            "Quick reminder: Events start at 10 AM sharp! 🕙",
+            "The mural at our Sketty hub is finally finished! 🎨",
+            "Check out these action shots from Social Play Fest! 📸",
+            "Welcoming our new instructor, Gethin, to the Hive! 👋",
+            "Murder Mystery Day: Who will crack the case? 🕵️",
+            "Special thanks to Bishop Gore School for the support! 🏫",
+            "Registration for the Winter Adrenaline Weekend is open. ❄️",
+            "Another day of making memories in Swansea! 🏴󠁧󠁢󠁷󠁬󠁳󠁿"
+        ]
+
+        for i, text in enumerate(feed_content):
             st.markdown(f'<div class="post-card">{text}</div>', unsafe_allow_html=True)
             c_l, c_r = st.columns([1, 4])
-            if c_l.button(f"👍 {st.session_state.post_likes[p_idx]}", key=f"pl_{p_idx}"):
-                st.session_state.post_likes[p_idx] += 1
-                st.rerun()
-            if c_r.button(f"🔗 Share", key=f"ps_{p_idx}"):
-                st.toast("Link copied!")
-                st.success("📢 Post Shared successfully!")
+            if c_l.button(f"👍 {st.session_state.post_likes[i]}", key=f"pl_{i}"):
+                st.session_state.post_likes[i] += 1; st.rerun()
+            if c_r.button(f"🔗 Share", key=f"ps_{i}"): st.success("📢 Post Shared!")
 
-    # --- TAB 2: PHOTOS ---
+    # --- TAB 2: GALLERY ---
     with tab2:
         if st.session_state.photo_index is None:
             st.markdown('<div class="section-header">Gallery</div>', unsafe_allow_html=True)
             g_cols = st.columns(3)
             for i, (img, title) in enumerate(posters):
                 with g_cols[i % 3]:
-                    if os.path.exists(img):
-                        st.image(img, use_container_width=True)
-                        if st.button(f"View {title}", key=f"gv_{i}"):
-                            st.session_state.photo_index = i
-                            st.rerun()
+                    st.image(img, use_container_width=True)
+                    if st.button(f"View {title}", key=f"gv_{i}"):
+                        st.session_state.photo_index = i; st.rerun()
         else:
-            # Scaled Down Enlarged View
-            l_b, mid, r_b = st.columns([1, 1.5, 1])
-            with mid:
-                idx = st.session_state.photo_index
-                st.image(posters[idx][0], use_container_width=True)
-                if st.button(f"❤️ {st.session_state.photo_likes[idx]} Likes", key=f"phl_{idx}"):
-                    st.session_state.photo_likes[idx] += 1
-                    st.rerun()
-                c1, c2, c3 = st.columns(3)
-                if c1.button("⬅ Prev"): st.session_state.photo_index = (idx-1)%len(posters); st.rerun()
-                if c2.button("Next ➡"): st.session_state.photo_index = (idx+1)%len(posters); st.rerun()
-                if c3.button("❌ Close", type="primary"): st.session_state.photo_index = None; st.rerun()
+            idx = st.session_state.photo_index
+            st.image(posters[idx][0], use_container_width=True, caption=posters[idx][1])
+            if st.button(f"❤️ {st.session_state.photo_likes[idx]} Likes", key=f"phl_{idx}"):
+                st.session_state.photo_likes[idx] += 1; st.rerun()
+            if st.button("❌ Close Gallery"): st.session_state.photo_index = None; st.rerun()
 
-    # --- TAB 3: BOOK NOW ---
+    # --- TAB 3: BOOK NOW (£54.99) ---
     with tab3:
-        st.markdown('<div class="section-header">Booking</div>', unsafe_allow_html=True)
-        if st.session_state.booking_step == "select":
-            evt = st.selectbox("Activity:", list(event_data.keys()))
-            dt = st.selectbox("Date:", event_data[evt])
-            st.markdown('<div class="price-tag">Price: £54.99</div>', unsafe_allow_html=True)
-            if st.button("Confirm"):
-                st.session_state.temp_booking = {"event": evt, "date": dt, "id": f"BH-{random.randint(1000, 9999)}"}
-                st.session_state.booking_step = "confirm"; st.rerun()
-        elif st.session_state.booking_step == "confirm":
-            st.success("Registered!")
-            if st.button("Send Receipt"): st.session_state.booking_step = "receipt"; st.rerun()
-        elif st.session_state.booking_step == "receipt":
-            st.info("📩 Sent to ***********@gmail.com")
-            if st.button("Finish"):
-                st.session_state.my_bookings.append(st.session_state.temp_booking)
-                st.session_state.booking_step = "select"; st.rerun()
+        st.markdown('<div class="section-header">Book Your Adventure - £54.99</div>', unsafe_allow_html=True)
+        evt = st.selectbox("Activity:", list(event_data.keys()))
+        dt = st.selectbox("Date:", event_data[evt])
+        if st.button("Confirm Booking"):
+            st.session_state.my_bookings.append({"event": evt, "date": dt, "id": f"BH-{random.randint(1000, 9999)}"})
+            st.success("Registered! Check 'My Bookings'.")
 
     # --- TAB 4: MY BOOKINGS ---
     with tab4:
-        st.markdown('<div class="section-header">My Schedule</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-header">Active Schedule</div>', unsafe_allow_html=True)
         for i, b in enumerate(st.session_state.my_bookings):
-            st.markdown(f'<div class="content-box">🎯 {b["event"]} - {b["date"]} (ID: {b["id"]})</div>', unsafe_allow_html=True)
-            if st.button(f"Cancel {b['id']}", key=f"can_{i}"):
-                st.session_state.my_bookings.pop(i); st.rerun()
+            st.markdown(f'<div class="content-box">🎯 {b["event"]} - {b["date"]}</div>', unsafe_allow_html=True)
+            if st.button(f"Cancel {b['id']}", key=f"can_{i}"): st.session_state.my_bookings.pop(i); st.rerun()
 
     # --- TAB 5: FAQ ---
     with tab5:
         st.markdown('<div class="section-header">FAQ</div>', unsafe_allow_html=True)
-        st.markdown("""<div class="content-box"><p class="faq-q">Is gear included?</p><p>Yes, all gear is in the £54.99 price.</p><p class="faq-q">What if it rains?</p><p>We use indoor facilities in Sketty.</p></div>""", unsafe_allow_html=True)
+        st.markdown("<b>Is gear included?</b><br>Yes! Everything is included in the £54.99 price.<br><br><b>What if it rains?</b><br>We move to Sketty indoor facilities.", unsafe_allow_html=True)
