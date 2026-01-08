@@ -17,7 +17,7 @@ if "user_reviews" not in st.session_state:
 if "post_likes" not in st.session_state:
     st.session_state.post_likes = [random.randint(45, 950) for _ in range(100)]
 
-# 2. EVENT DATA
+# 2. DATE MAPPING
 event_data = {
     "Target Day": ["4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th August"],
     "Adrenaline Weekend": ["12th", "13th", "14th", "18th", "19th August"],
@@ -27,7 +27,7 @@ event_data = {
     "Skill Switch Experience": ["8th", "14th", "21st", "23rd August"]
 }
 
-# 3. VERIFIED GALLERY DATA (Using your uploaded cinematic images)
+# 3. VERIFIED GALLERY DATA (Updated to .png)
 posters = [
     ("target_day.jpg", "Target Day Poster"),
     ("adrenaline_weekend.jpg", "Adrenaline Weekend Poster"),
@@ -35,19 +35,19 @@ posters = [
     ("social_play_fest.jpg", "Social Play Fest Poster"),
     ("extreme_impact.jpg", "Extreme Impact Poster"),
     ("skill_switch.jpg", "Skill Switch Poster"),
-    ("Gemini_Generated_Image_wdo2rzwdo2rzwdo2.jpg", "Archery Field Setup"),
-    ("Gemini_Generated_Image_of95w8of95w8of95.jpg", "Outdoor Archery Action"),
-    ("Gemini_Generated_Image_4nwpmx4nwpmx4nwp.jpg", "Indoor Archery Arena"),
-    ("Gemini_Generated_Image_fqzz3rfqzz3rfqzz.jpg", "Bushcraft Fire Starting"),
-    ("Gemini_Generated_Image_sbz4c8sbz4c8sbz4.jpg", "Laser Tag Equipment Delivery"),
-    ("Gemini_Generated_Image_q74buoq74buoq74b.jpg", "Outdoor Laser Tag Action"),
-    ("Gemini_Generated_Image_g2yanmg2yanmg2ya.jpg", "Indoor Neon Arena"),
-    ("Gemini_Generated_Image_hunw61hunw61hunw.jpg", "Victory Celebration"),
-    ("Gemini_Generated_Image_lpugatlpugatlpug.jpg", "Stouthall Mansion Site"),
-    ("Gemini_Generated_Image_xz9er1xz9er1xz9e.jpg", "Indoor Team Logic Challenge"),
-    ("Gemini_Generated_Image_vv49c1vv49c1vv49.jpg", "Indoor Cooperative Games"),
-    ("Gemini_Generated_Image_olevawolevawolev.jpg", "Outdoor Physical Puzzles"),
-    ("Gemini_Generated_Image_cueiazcueiazcuei.jpg", "Outdoor Team Competition")
+    ("Gemini_Generated_Image_wdo2rzwdo2rzwdo2.png", "Archery Field Setup"),
+    ("Gemini_Generated_Image_of95w8of95w8of95.png", "Outdoor Archery Action"),
+    ("Gemini_Generated_Image_4nwpmx4nwpmx4nwp.png", "Indoor Archery Arena"),
+    ("Gemini_Generated_Image_fqzz3rfqzz3rfqzz.png", "Survival Campfire"),
+    ("Gemini_Generated_Image_sbz4c8sbz4c8sbz4.png", "Tactical Laser Gear"),
+    ("Gemini_Generated_Image_q74buoq74buoq74b.png", "Outdoor Laser Tag Action"),
+    ("Gemini_Generated_Image_g2yanmg2yanmg2ya.png", "Indoor Neon Arena"),
+    ("Gemini_Generated_Image_hunw61hunw61hunw.png", "Outdoor Victory Celebration"),
+    ("Gemini_Generated_Image_lpugatlpugatlpug.png", "Stouthall Mansion Site"),
+    ("Gemini_Generated_Image_xz9er1xz9er1xz9e.png", "Indoor Team Logic Challenge"),
+    ("Gemini_Generated_Image_vv49c1vv49c1vv49.png", "Indoor Cooperative Games"),
+    ("Gemini_Generated_Image_olevawolevawolev.png", "Outdoor Physical Puzzles"),
+    ("Gemini_Generated_Image_cueiazcueiazcuei.png", "Outdoor Team Challenge")
 ]
 
 # 4. UI STYLING
@@ -60,6 +60,7 @@ st.markdown("""
     .post-card { border: 1px solid #dddfe2; background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 5px; font-weight: bold; }
     .motto { color: #adb9d3; font-weight: bold; font-size: 22px; text-align: center; display: block; margin-top: 20px; letter-spacing: 3px; }
     .faq-q { font-weight: bold; color: #adb9d3; margin-top: 10px; display: block; }
+    .quote-box { border-left: 5px solid #adb9d3; background-color: #f9f9f9; padding: 10px; margin-bottom: 10px; font-style: italic; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -69,15 +70,21 @@ st.markdown('<div class="nav-bar"><b>takebook</b><div style="display:flex; gap:2
 col_left, col_right = st.columns([1, 2.3])
 
 with col_left:
-    # Business Site Image
-    if os.path.exists("Gemini_Generated_Image_lpugatlpugatlpug.jpg"):
-        st.image("Gemini_Generated_Image_lpugatlpugatlpug.jpg", use_container_width=True)
+    # Business Site Image (Side)
+    if os.path.exists("image_b8d661.png"):
+        st.image("image_b8d661.png", use_container_width=True)
+    
     st.markdown('<div class="section-header">Basic Information</div>', unsafe_allow_html=True)
     st.markdown('<div class="content-box"><b>Business Hub:</b> Swansea.<br><b>Activity Site:</b> Stouthall Country Mansion.<br><b>Wet Weather:</b> Indoor arena at Stouthall.</div>', unsafe_allow_html=True)
     
     st.markdown('<div class="section-header">Join the Hive</div>', unsafe_allow_html=True)
     st.text_input("Newsletter Signup", placeholder="email@example.com", key="side_nl")
     if st.button("Subscribe"): st.toast("Welcome to the Hive! 🐝")
+
+    st.markdown('<div class="section-header">Contact Our Team</div>', unsafe_allow_html=True)
+    with st.expander("Message Us"):
+        st.text_input("Your Name", key="side_msg_n")
+        if st.button("Send"): st.success("Message Sent!")
 
 with col_right:
     tab1, tab_posts, tab2, tab3, tab4, tab5 = st.tabs(["📄 Info", "📰 Posts", "🖼️ Photos", "🎟️ Book Now!", "📅 My Bookings", "❓ FAQ"])
@@ -86,90 +93,73 @@ with col_right:
     with tab1:
         st.markdown('<div class="stat-bar"><div class="stat-item"><b>1.4k</b> Followers</div><div class="stat-item"><b>920</b> Reviews</div><div class="stat-item"><b>4.9 ⭐</b> Rating</div></div>', unsafe_allow_html=True)
         st.markdown('<div class="section-header">About Blast Hive</div>', unsafe_allow_html=True)
-        st.markdown('<div class="content-box">We are Blast Hive, an all-inclusive company offering exciting days out for young people. While we are based in Swansea, <b>all activities take place at the Stouthall Country Mansion</b>. We provide unforgettable experiences including bushcraft, team sports, and murder mystery days full of brain-boggling puzzles.<br><span class="motto">READY, AIM, BLAST!</span></div>', unsafe_allow_html=True)
+        st.markdown('<div class="content-box">We are Blast Hive... <br><span class="motto">READY, AIM, BLAST!</span></div>', unsafe_allow_html=True)
+        
+        with st.expander("⭐ Leave a Review"):
+            r_n = st.text_input("Name")
+            r_s = st.select_slider("Rating", options=["⭐", "⭐⭐", "⭐⭐⭐", "⭐⭐⭐⭐", "⭐⭐⭐⭐⭐"], value="⭐⭐⭐⭐⭐")
+            r_t = st.text_area("How was your experience?")
+            if st.button("Post Review"):
+                if r_n and r_t:
+                    st.session_state.user_reviews.insert(0, {"name": r_n, "stars": r_s, "text": r_t})
+                    st.rerun()
 
-    # --- TAB 2: POSTS (Using Your Images) ---
+        for r in st.session_state.user_reviews:
+            st.markdown(f'<div class="quote-box">{r["stars"]} "{r["text"]}" - {r["name"]}</div>', unsafe_allow_html=True)
+
+    # --- TAB 2: POSTS (Campaign Feed) ---
     with tab_posts:
         st.markdown('<div class="section-header">Stouthall Activity Feed</div>', unsafe_allow_html=True)
-        
         posts_content = [
-            ("The range is ready! Final setups for Target Day at Stouthall. 🏹", "Gemini_Generated_Image_wdo2rzwdo2rzwdo2.jpg"),
-            ("Intense concentration at our forest archery session. 🎯", "Gemini_Generated_Image_of95w8of95w8of95.jpg"),
-            ("The indoor archery hall is looking spectacular for today's sessions! 🏹", "Gemini_Generated_Image_4nwpmx4nwpmx4nwp.jpg"),
-            ("Mastering the primitive skills: Fire lighting in the woods. 🔥", "Gemini_Generated_Image_fqzz3rfqzz3rfqzz.jpg"),
-            ("New hardware arrival! Fresh laser gear delivered to HQ today. 🔫", "Gemini_Generated_Image_sbz4c8sbz4c8sbz4.jpg"),
-            ("High-intensity combat in our woodland laser tag zone. 🌲", "Gemini_Generated_Image_q74buoq74buoq74b.jpg"),
-            ("The neon arena is the place to be for fast-paced action. 🌈", "Gemini_Generated_Image_g2yanmg2yanmg2ya.jpg"),
-            ("That victory feeling! Celebrating a great team effort today. 🙌", "Gemini_Generated_Image_hunw61hunw61hunw.jpg")
+            ("The range is ready at Stouthall Mansion! 🏹", "Gemini_Generated_Image_wdo2rzwdo2rzwdo2.png"),
+            ("Tactical laser gear checked and ready. 🔫", "Gemini_Generated_Image_sbz4c8sbz4c8sbz4.png"),
+            ("Survival training: Mastery of the campfire! 🔥", "Gemini_Generated_Image_fqzz3rfqzz3rfqzz.png"),
+            ("Victory celebration at the mansion! 🙌", "Gemini_Generated_Image_hunw61hunw61hunw.png")
         ]
-        
-        # Fill to 35 unique posts
         for i in range(len(posts_content), 35):
-            posts_content.append((f"Update #{i+1}: Another fantastic session at Stouthall Mansion! See the booking tab for open dates.", None))
+            posts_content.append((f"Update #{i+1}: Join us at Stouthall for our next event!", None))
 
         for i, (txt, img) in enumerate(posts_content):
             st.markdown(f'<div class="post-card">{txt}</div>', unsafe_allow_html=True)
-            if img and os.path.exists(img): 
-                st.image(img, width=420)
+            if img: st.image(img, width=420)
             c1, c2 = st.columns([1, 4])
             if c1.button(f"👍 {st.session_state.post_likes[i]}", key=f"feed_pl_{i}"):
                 st.session_state.post_likes[i] += 1; st.rerun()
 
-    # --- TAB 3: PHOTOS (Full High-Quality Gallery) ---
+    # --- TAB 3: PHOTOS (Gallery) ---
     with tab2:
         if st.session_state.photo_index is None:
             cols = st.columns(3)
             for i, (img, title) in enumerate(posters):
                 with cols[i % 3]:
-                    if os.path.exists(img):
-                        st.image(img, use_container_width=True)
+                    st.image(img, use_container_width=True)
                     if st.button(f"View {title}", key=f"gal_v_{i}"):
                         st.session_state.photo_index = i; st.rerun()
         else:
             idx = st.session_state.photo_index
             st.image(posters[idx][0], width=550, caption=posters[idx][1])
-            c1, c2, c3 = st.columns(3)
-            if c1.button("⬅ Previous"): st.session_state.photo_index = (idx-1)%len(posters); st.rerun()
-            if c2.button("Next ➡"): st.session_state.photo_index = (idx+1)%len(posters); st.rerun()
-            if c3.button("❌ Close Gallery"): st.session_state.photo_index = None; st.rerun()
+            if st.button("❌ Close Gallery"): st.session_state.photo_index = None; st.rerun()
 
     # --- TAB 4: BOOKING ---
     with tab3:
         st.markdown('<div class="section-header">Book Your Adventure - £54.99</div>', unsafe_allow_html=True)
-        if st.session_state.booking_step == "select":
-            evt = st.selectbox("Choose Event:", list(event_data.keys()))
-            dt = st.selectbox("Choose Date:", event_data[evt])
-            if st.button("Confirm Details"):
-                st.session_state.temp_booking = {"event": evt, "date": dt, "id": f"BH-{random.randint(1000, 9999)}"}
-                st.session_state.booking_step = "receipt_confirm"; st.rerun()
+        evt = st.selectbox("Choose Event:", list(event_data.keys()))
+        dt = st.selectbox("Choose Date:", event_data[evt])
+        if st.button("Confirm Details"):
+            st.session_state.temp_booking = {"event": evt, "date": dt, "id": f"BH-{random.randint(1000, 9999)}"}
+            st.session_state.booking_step = "receipt_confirm"; st.rerun()
         
-        elif st.session_state.booking_step == "receipt_confirm":
-            st.warning("Booking Saved! Do you require a receipt?")
-            if st.button("Yes, Send Receipt"): st.session_state.booking_step = "receipt_sent"; st.rerun()
-            if st.button("No Receipt, Finish"):
-                st.session_state.my_bookings.append(st.session_state.temp_booking)
-                st.session_state.booking_step = "select"; st.rerun()
-
-        elif st.session_state.booking_step == "receipt_sent":
-            st.success("📩 Receipt sent to your email!")
-            if st.button("Return to Booking"):
-                st.session_state.my_bookings.append(st.session_state.temp_booking)
-                st.session_state.booking_step = "select"; st.rerun()
-
-    # --- TAB 5: MY BOOKINGS ---
-    with tab4:
-        st.markdown('<div class="section-header">Confirmed Slots</div>', unsafe_allow_html=True)
-        for i, b in enumerate(st.session_state.my_bookings):
-            st.markdown(f'<div class="content-box">🎯 {b["event"]} - {b["date"]}</div>', unsafe_allow_html=True)
-            if st.button(f"Cancel Booking {b['id']}", key=f"del_b_{i}"):
-                st.session_state.my_bookings.pop(i); st.rerun()
+        if st.session_state.booking_step == "receipt_confirm":
+            st.warning("Do you require a receipt?")
+            if st.button("Yes, Send to *******@gmail.com"): st.success("Receipt sent!"); st.session_state.my_bookings.append(st.session_state.temp_booking); st.session_state.booking_step = "select"; st.rerun()
 
     # --- TAB 6: FAQ ---
     with tab5:
         faqs = [
             ("Where is the site?", "Head office Swansea, but ALL events are held at Stouthall Mansion."),
             ("What if it rains?", "We move to the indoor arena at Stouthall."),
-            ("What is the cost?", "£54.99 per person for all activities.")
+            ("What is the cost?", "£54.99 per person for all activities."),
+            ("Are staff qualified?", "Yes, all staff are Enhanced DBS checked and First Aid trained.")
         ]
         for q, a in faqs:
             st.markdown(f'<span class="faq-q">{q}</span><span>{a}</span>', unsafe_allow_html=True)
