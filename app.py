@@ -3,7 +3,7 @@ import os
 import random
 
 # --- SYSTEM INITIALIZATION ---
-st.set_page_config(layout="wide", page_title="Blast Hive - Takebook")
+st.set_page_config(layout="wide", page_title="Blast Hive - Fakebook")
 
 # 1. Memory Management (Session State)
 if "photo_index" not in st.session_state:
@@ -17,7 +17,7 @@ if "user_reviews" not in st.session_state:
 if "post_likes" not in st.session_state:
     st.session_state.post_likes = [random.randint(45, 950) for _ in range(100)]
 
-# 2. DATE MAPPING
+# 2. EVENT DATA
 event_data = {
     "Target Day": ["4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th August"],
     "Adrenaline Weekend": ["12th", "13th", "14th", "18th", "19th August"],
@@ -27,7 +27,7 @@ event_data = {
     "Skill Switch Experience": ["8th", "14th", "21st", "23rd August"]
 }
 
-# 3. VERIFIED GALLERY DATA (Updated to .png)
+# 3. VERIFIED GALLERY DATA (Posters = .jpg | Activity Images = .png)
 posters = [
     ("target_day.jpg", "Target Day Poster"),
     ("adrenaline_weekend.jpg", "Adrenaline Weekend Poster"),
@@ -53,29 +53,27 @@ posters = [
 # 4. UI STYLING
 st.markdown("""
     <style>
+    .fb-logo { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: bold; font-size: 28px; letter-spacing: -1px; }
     .nav-bar { background-color: #adb9d3; padding: 10px; display: flex; justify-content: space-between; align-items: center; color: white; border-radius: 4px; margin-bottom: 20px;}
     .section-header { background-color: #adb9d3; color: white; padding: 8px 12px; font-weight: bold; font-size: 14px; margin-top: 15px; border-radius: 2px; }
     .content-box { border: 1px solid #dddfe2; background-color: white; padding: 15px; font-size: 13px; line-height: 1.6; color: #1c1e21; margin-bottom: 12px; border-radius: 4px; }
     .stat-bar { background-color: #f0f2f5; padding: 10px; display: flex; justify-content: space-around; border: 1px solid #dddfe2; border-radius: 4px; margin-bottom: 15px; }
     .post-card { border: 1px solid #dddfe2; background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 5px; font-weight: bold; }
     .motto { color: #adb9d3; font-weight: bold; font-size: 22px; text-align: center; display: block; margin-top: 20px; letter-spacing: 3px; }
-    .faq-q { font-weight: bold; color: #adb9d3; margin-top: 10px; display: block; }
-    .quote-box { border-left: 5px solid #adb9d3; background-color: #f9f9f9; padding: 10px; margin-bottom: 10px; font-style: italic; }
+    .quote-box { border-left: 5px solid #adb9d3; background-color: #f9f9f9; padding: 10px; margin-bottom: 10px; font-style: italic; font-size: 13px; }
     </style>
     """, unsafe_allow_html=True)
 
 # 5. HEADER
-st.markdown('<div class="nav-bar"><b>takebook</b><div style="display:flex; gap:20px; align-items:center;"><span>Profile</span><span>Inbox</span><span>Friends</span><div style="background-color: white; color: #333; padding: 2px 10px; border-radius: 2px;">Blast Hive 🔍</div></div></div>', unsafe_allow_html=True)
+st.markdown('<div class="nav-bar"><span class="fb-logo">fakebook</span><div style="display:flex; gap:20px; align-items:center;"><span>Profile</span><span>Inbox</span><span>Friends</span><div style="background-color: white; color: #333; padding: 2px 10px; border-radius: 2px;">Blast Hive 🔍</div></div></div>', unsafe_allow_html=True)
 
 col_left, col_right = st.columns([1, 2.3])
 
 with col_left:
-    # Business Site Image (Side)
     if os.path.exists("image_b8d661.png"):
         st.image("image_b8d661.png", use_container_width=True)
-    
     st.markdown('<div class="section-header">Basic Information</div>', unsafe_allow_html=True)
-    st.markdown('<div class="content-box"><b>Business Hub:</b> Swansea.<br><b>Activity Site:</b> Stouthall Country Mansion.<br><b>Wet Weather:</b> Indoor arena at Stouthall.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="content-box"><b>Business Hub:</b> Swansea.<br><b>Activity Site:</b> Stouthall Country Mansion.</div>', unsafe_allow_html=True)
     
     st.markdown('<div class="section-header">Join the Hive</div>', unsafe_allow_html=True)
     st.text_input("Newsletter Signup", placeholder="email@example.com", key="side_nl")
@@ -89,7 +87,6 @@ with col_left:
 with col_right:
     tab1, tab_posts, tab2, tab3, tab4, tab5 = st.tabs(["📄 Info", "📰 Posts", "🖼️ Photos", "🎟️ Book Now!", "📅 My Bookings", "❓ FAQ"])
 
-    # --- TAB 1: INFO ---
     with tab1:
         st.markdown('<div class="stat-bar"><div class="stat-item"><b>1.4k</b> Followers</div><div class="stat-item"><b>920</b> Reviews</div><div class="stat-item"><b>4.9 ⭐</b> Rating</div></div>', unsafe_allow_html=True)
         st.markdown('<div class="section-header">About Blast Hive</div>', unsafe_allow_html=True)
@@ -105,19 +102,15 @@ with col_right:
                     st.rerun()
 
         for r in st.session_state.user_reviews:
-            st.markdown(f'<div class="quote-box">{r["stars"]} "{r["text"]}" - {r["name"]}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="quote-box">{r["stars"]} "{r["text"]}" - {r["name"]} (Latest)</div>', unsafe_allow_html=True)
 
-    # --- TAB 2: POSTS (Campaign Feed) ---
     with tab_posts:
-        st.markdown('<div class="section-header">Stouthall Activity Feed</div>', unsafe_allow_html=True)
         posts_content = [
             ("The range is ready at Stouthall Mansion! 🏹", "Gemini_Generated_Image_wdo2rzwdo2rzwdo2.png"),
-            ("Tactical laser gear checked and ready. 🔫", "Gemini_Generated_Image_sbz4c8sbz4c8sbz4.png"),
-            ("Survival training: Mastery of the campfire! 🔥", "Gemini_Generated_Image_fqzz3rfqzz3rfqzz.png"),
-            ("Victory celebration at the mansion! 🙌", "Gemini_Generated_Image_hunw61hunw61hunw.png")
+            ("Mastering the woods: Fire starting skills! 🔥", "Gemini_Generated_Image_fqzz3rfqzz3rfqzz.png")
         ]
         for i in range(len(posts_content), 35):
-            posts_content.append((f"Update #{i+1}: Join us at Stouthall for our next event!", None))
+            posts_content.append((f"Campaign Update #{i+1}: New dates added for August!", None))
 
         for i, (txt, img) in enumerate(posts_content):
             st.markdown(f'<div class="post-card">{txt}</div>', unsafe_allow_html=True)
@@ -126,7 +119,6 @@ with col_right:
             if c1.button(f"👍 {st.session_state.post_likes[i]}", key=f"feed_pl_{i}"):
                 st.session_state.post_likes[i] += 1; st.rerun()
 
-    # --- TAB 3: PHOTOS (Gallery) ---
     with tab2:
         if st.session_state.photo_index is None:
             cols = st.columns(3)
@@ -140,9 +132,8 @@ with col_right:
             st.image(posters[idx][0], width=550, caption=posters[idx][1])
             if st.button("❌ Close Gallery"): st.session_state.photo_index = None; st.rerun()
 
-    # --- TAB 4: BOOKING ---
     with tab3:
-        st.markdown('<div class="section-header">Book Your Adventure - £54.99</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-header">Book Your Day Out - £54.99</div>', unsafe_allow_html=True)
         evt = st.selectbox("Choose Event:", list(event_data.keys()))
         dt = st.selectbox("Choose Date:", event_data[evt])
         if st.button("Confirm Details"):
@@ -151,15 +142,4 @@ with col_right:
         
         if st.session_state.booking_step == "receipt_confirm":
             st.warning("Do you require a receipt?")
-            if st.button("Yes, Send to *******@gmail.com"): st.success("Receipt sent!"); st.session_state.my_bookings.append(st.session_state.temp_booking); st.session_state.booking_step = "select"; st.rerun()
-
-    # --- TAB 6: FAQ ---
-    with tab5:
-        faqs = [
-            ("Where is the site?", "Head office Swansea, but ALL events are held at Stouthall Mansion."),
-            ("What if it rains?", "We move to the indoor arena at Stouthall."),
-            ("What is the cost?", "£54.99 per person for all activities."),
-            ("Are staff qualified?", "Yes, all staff are Enhanced DBS checked and First Aid trained.")
-        ]
-        for q, a in faqs:
-            st.markdown(f'<span class="faq-q">{q}</span><span>{a}</span>', unsafe_allow_html=True)
+            if st.button("Yes, Send Receipt to *******@gmail.com"): st.success("Receipt sent!"); st.session_state.my_bookings.append(st.session_state.temp_booking); st.session_state.booking_step = "select"; st.rerun()
