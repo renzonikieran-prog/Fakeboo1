@@ -5,8 +5,7 @@ import random
 # --- SYSTEM INITIALIZATION ---
 st.set_page_config(layout="wide", page_title="Blast Hive - Fakebook")
 
-# 1. Memory Management (Session State)
-# Optimized state management to prevent slow reloads
+# 1. Memory Management (Session State) - FIXED ATTRIBUTE ERROR
 if "photo_index" not in st.session_state:
     st.session_state.photo_index = None
 if "booking_step" not in st.session_state:
@@ -17,21 +16,14 @@ if "user_reviews" not in st.session_state:
     st.session_state.user_reviews = [
         {"name": "Liam W.", "stars": "⭐⭐⭐⭐⭐", "text": "Best laser tag experience in Wales! Professional staff and amazing gear."},
         {"name": "Chloe M.", "stars": "⭐⭐⭐⭐", "text": "Really enjoyed the bushcraft, great for team building."},
-        {"name": "Dan R.", "stars": "⭐⭐⭐⭐⭐", "text": "The puzzles at Stouthall were brain-melters. Loved the challenge!"}
+        {"name": "Dan R.", "stars": "⭐⭐⭐⭐⭐", "text": "The puzzles at Stouthall were brain-melters. Loved the challenge!"},
+        {"name": "Sian T.", "stars": "⭐⭐⭐⭐⭐", "text": "Stouthall Mansion is the perfect backdrop for these activities."}
     ]
+# Ensure post_likes is a dictionary and initialized
 if "post_likes" not in st.session_state:
     st.session_state.post_likes = {i: random.randint(45, 1200) for i in range(60)}
 
-# 2. DATA MAPPING
-event_data = {
-    "Target Day": ["4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th August"],
-    "Adrenaline Weekend": ["12th", "13th", "14th", "18th", "19th August"],
-    "Ultimate Challenge Day": ["6th", "7th", "11th", "20th August"],
-    "Social Play Fest": ["9th", "10th", "15th", "16th August"],
-    "Extreme Impact Day": ["4th", "5th", "17th", "22nd August"],
-    "Skill Switch Experience": ["8th", "14th", "21st", "23rd August"]
-}
-
+# 2. DATA MAPPING (Posters .jpg | Activities .png)
 posters = [
     ("target_day.jpg", "Target Day Poster"),
     ("adrenaline_weekend.jpg", "Adrenaline Weekend Poster"),
@@ -63,6 +55,7 @@ st.markdown("""
     .content-box { border: 1px solid #dddfe2; background-color: white; padding: 15px; font-size: 13px; line-height: 1.6; color: #1c1e21; margin-bottom: 12px; border-radius: 4px; }
     .post-card { border: 1px solid #dddfe2; background-color: white; padding: 20px; border-radius: 8px; margin-bottom: 25px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
     .motto { color: #adb9d3; font-weight: bold; font-size: 22px; text-align: center; display: block; margin-top: 20px; letter-spacing: 3px; }
+    .faq-q { font-weight: bold; color: #adb9d3; margin-top: 10px; display: block; }
     .quote-box { border-left: 5px solid #adb9d3; background-color: #f9f9f9; padding: 10px; margin-bottom: 10px; font-style: italic; font-size: 13px; }
     </style>
     """, unsafe_allow_html=True)
@@ -88,16 +81,16 @@ with col_left:
 with col_right:
     tab1, tab_posts, tab2, tab3, tab4, tab5 = st.tabs(["📄 Info", "📰 Posts", "🖼️ Photos", "🎟️ Book Now!", "📅 My Bookings", "❓ FAQ"])
 
-    # --- TAB 1: IMPROVED ABOUT & REVIEWS ---
+    # --- TAB 1: ABOUT & REVIEWS ---
     with tab1:
         st.markdown('<div class="section-header">About Blast Hive</div>', unsafe_allow_html=True)
-        st.markdown('<div class="content-box">Blast Hive is South Wales\' premier adventure company for young people. Based out of the historic <b>Stouthall Country Mansion</b>, we provide high-intensity activity days including <b>Survival Skills, Tactical Laser Tag, Archery, and Elite Team Challenges</b>. Our goal is to provide unforgettable, affordable experiences that build confidence and teamwork. <br><span class="motto">READY, AIM, BLAST!</span></div>', unsafe_allow_html=True)
+        st.markdown('<div class="content-box">Blast Hive is South Wales\' premier adventure company. Based at the historic <b>Stouthall Country Mansion</b>, we provide high-intensity activity days including <b>Survival Skills, Tactical Laser Tag, Archery, and Elite Team Challenges</b>. <br><span class="motto">READY, AIM, BLAST!</span></div>', unsafe_allow_html=True)
         
-        st.markdown('<div class="section-header">Latest Reviews</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-header">Community Reviews</div>', unsafe_allow_html=True)
         for r in st.session_state.user_reviews:
             st.markdown(f'<div class="quote-box">{r["stars"]} "{r["text"]}" - {r["name"]}</div>', unsafe_allow_html=True)
 
-    # --- TAB 2: 55+ POSTS (FIXED LIKES) ---
+    # --- TAB 2: 55+ SEPARATED POSTS ---
     with tab_posts:
         for i in range(55):
             st.markdown('<div class="post-card">', unsafe_allow_html=True)
@@ -110,13 +103,14 @@ with col_right:
             if img and os.path.exists(img):
                 st.image(img, width=450)
             
-            # Efficient Like Button logic
-            if st.button(f"👍 {st.session_state.post_likes.get(i, 0)} Likes", key=f"lk_{i}"):
-                st.session_state.post_likes[i] += 1
+            # FAST LIKE BUTTON LOGIC
+            likes = st.session_state.post_likes.get(i, 0)
+            if st.button(f"👍 {likes} Likes", key=f"lk_btn_{i}"):
+                st.session_state.post_likes[i] = likes + 1
                 st.rerun()
             st.markdown('</div>', unsafe_allow_html=True)
 
-    # --- TAB 3: PHOTO GALLERY (RESTORED) ---
+    # --- TAB 3: PHOTO GALLERY ---
     with tab2:
         if st.session_state.photo_index is None:
             cols = st.columns(3)
@@ -124,7 +118,7 @@ with col_right:
                 with cols[i % 3]:
                     if os.path.exists(img):
                         st.image(img, use_container_width=True)
-                        if st.button(f"View {title}", key=f"gal_{i}"):
+                        if st.button(f"View {title}", key=f"gal_open_{i}"):
                             st.session_state.photo_index = i
                             st.rerun()
         else:
@@ -134,24 +128,23 @@ with col_right:
                 st.session_state.photo_index = None
                 st.rerun()
 
-    # --- TAB 4/5: BOOKINGS & CANCELLATIONS (RESTORED) ---
-    with tab3: # Booking Logic
+    # --- TAB 4/5: BOOKINGS & CANCELLATIONS ---
+    with tab3:
         st.markdown('<div class="section-header">New Booking - £54.99</div>', unsafe_allow_html=True)
-        evt = st.selectbox("Activity:", list(event_data.keys()))
-        dt = st.selectbox("Date:", event_data[evt])
+        evt = st.selectbox("Activity:", ["Target Day", "Adrenaline Weekend", "Ultimate Challenge Day", "Social Play Fest", "Extreme Impact Day", "Skill Switch Experience"])
+        dt = st.selectbox("Date:", ["4th August", "5th August", "10th August", "15th August"])
         if st.button("Reserve Slot"):
-            new_id = f"BH-{random.randint(1000, 9999)}"
-            st.session_state.my_bookings.append({"event": evt, "date": dt, "id": new_id})
-            st.success(f"Reserved! Receipt sent to connected email.")
+            st.session_state.my_bookings.append({"event": evt, "date": dt, "id": f"BH-{random.randint(1000, 9999)}"})
+            st.success("Reserved! Receipt sent to connected email.")
 
-    with tab4: # My Bookings
+    with tab4:
         st.markdown('<div class="section-header">Your Scheduled Events</div>', unsafe_allow_html=True)
         if not st.session_state.my_bookings:
             st.info("No active bookings.")
         else:
             for i, b in enumerate(st.session_state.my_bookings):
-                st.markdown(f'<div class="content-box"><b>{b["event"]}</b><br>Date: {b["date"]}<br>Ref: {b["id"]}</div>', unsafe_allow_html=True)
-                if st.button(f"Cancel {b['id']}", key=f"can_{i}"):
+                st.markdown(f'<div class="content-box">🎯 <b>{b["event"]}</b><br>Date: {b["date"]} | ID: {b["id"]}</div>', unsafe_allow_html=True)
+                if st.button(f"Cancel {b['id']}", key=f"can_booking_{i}"):
                     st.session_state.my_bookings.pop(i)
                     st.rerun()
 
@@ -160,7 +153,8 @@ with col_right:
             ("Where is the site?", "HQ is Swansea, but ALL events are held at Stouthall Mansion."),
             ("What if it rains?", "We use our indoor arena at Stouthall."),
             ("What is the cost?", "£54.99 per person for all activities."),
-            ("Are staff qualified?", "Yes, Enhanced DBS checked and First Aid trained.")
+            ("Are staff qualified?", "Yes, Enhanced DBS checked and First Aid trained."),
+            ("Do you offer group discounts?", "Yes, groups of 10+ receive a 10% discount.")
         ]
         for q, a in faqs:
             st.markdown(f'<span class="faq-q">{q}</span><span>{a}</span>', unsafe_allow_html=True)
