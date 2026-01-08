@@ -15,7 +15,7 @@ if "my_bookings" not in st.session_state:
 if "user_reviews" not in st.session_state:
     st.session_state.user_reviews = []
 if "post_likes" not in st.session_state:
-    st.session_state.post_likes = [random.randint(5, 300) for _ in range(30)]
+    st.session_state.post_likes = [random.randint(10, 500) for _ in range(50)]
 
 # --- DATA MAPPING ---
 event_data = {
@@ -27,16 +27,20 @@ event_data = {
     "Skill Switch Experience": ["14th August"]
 }
 
-# Restoring the Photos List (Posters + Real Action)
+# ALL Posters and Real Action Shots Restored
 posters = [
     ("target_day.jpg", "Target Day Poster"),
     ("adrenaline_weekend.jpg", "Adrenaline Weekend Poster"),
     ("ultimate_challenge.jpg", "Ultimate Challenge Poster"),
+    ("social_play_fest.jpg", "Social Play Fest Poster"),
+    ("extreme_impact.jpg", "Extreme Impact Poster"),
+    ("skill_switch.jpg", "Skill Switch Poster"),
     ("https://images.unsplash.com/photo-1599586120429-48281b6f0ece", "Laser Tag Action"),
     ("https://images.unsplash.com/photo-1506332800446-0fb3df09358a", "Bushcraft Survival"),
     ("https://images.unsplash.com/photo-1544367567-0f2fcb009e0b", "Archery Range"),
     ("https://images.unsplash.com/photo-1511949863663-92c5c06cc0bb", "Team Celebration"),
-    ("https://images.unsplash.com/photo-1517164850305-99a3e65bb47e", "Puzzle Challenge")
+    ("https://images.unsplash.com/photo-1517164850305-99a3e65bb47e", "Puzzle Challenge"),
+    ("https://images.unsplash.com/photo-1464822759023-fed622ff2c3b", "Stouthall Estate View")
 ]
 
 # --- UI STYLING ---
@@ -48,8 +52,8 @@ st.markdown("""
     .stat-bar { background-color: #f0f2f5; padding: 10px; display: flex; justify-content: space-around; border: 1px solid #dddfe2; border-radius: 4px; margin-bottom: 15px; }
     .post-card { border: 1px solid #dddfe2; background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 5px; font-weight: bold; }
     .quote-box { font-style: italic; color: #4b4f56; border-left: 4px solid #adb9d3; padding-left: 12px; margin-bottom: 15px; }
-    .faq-q { font-weight: bold; color: #adb9d3; margin-top: 12px; font-size: 15px; display: block; }
     .price-tag { color: #2e7d32; font-size: 26px; font-weight: bold; }
+    .motto { color: #adb9d3; font-weight: bold; font-size: 18px; text-align: center; display: block; margin-top: 10px; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -62,8 +66,14 @@ with col_left:
     if os.path.exists("image_83c146.jpg"):
         st.image("image_83c146.jpg", use_container_width=True)
     st.markdown('<div class="section-header">Basic Information</div>', unsafe_allow_html=True)
-    st.markdown('<div class="content-box"><b>Business:</b> Blast Hive.<br><b>Location:</b> Swansea, Sketty.<br><b>Wet Weather:</b> Indoor facility at Stouthall.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="content-box"><b>Head Office:</b> Swansea.<br><b>Activity Site:</b> Stouthall Country Mansion.<br><b>Wet Weather:</b> Indoor facility at Stouthall.</div>', unsafe_allow_html=True)
     
+    # Newsletter Restored
+    st.markdown('<div class="section-header">Join the Hive</div>', unsafe_allow_html=True)
+    st.text_input("Enter Email for updates", key="news_email")
+    if st.button("Subscribe"):
+        st.toast("Welcome to the Hive! 🐝")
+
     st.markdown('<div class="section-header">Contact Our Team</div>', unsafe_allow_html=True)
     with st.expander("Message Us"):
         st.text_input("Name", key="side_n")
@@ -76,9 +86,8 @@ with col_right:
     with tab1:
         st.markdown('<div class="stat-bar"><div class="stat-item"><b>1.4k</b> Followers</div><div class="stat-item"><b>920</b> Reviews</div><div class="stat-item"><b>4.9 ⭐</b> Rating</div></div>', unsafe_allow_html=True)
         st.markdown('<div class="section-header">About Blast Hive</div>', unsafe_allow_html=True)
-        st.markdown('<div class="content-box">We are Blast Hive, an all-inclusive company that offers exciting days out for the young people in our area. Based in Swansea, we provide unforgettable experiences including bushcraft, team sports, and thrilling murder mystery days. For rainy weather, we utilize our fantastic indoor facility at Stouthall to ensure the fun never stops!</div>', unsafe_allow_html=True)
+        st.markdown('<div class="content-box">We are Blast Hive, an all-inclusive company that offers exciting days out for the young people in our area. While our head office is located in Swansea, <b>all our activities take place on the stunning grounds of Stouthall</b>. We provide unforgettable experiences including bushcraft, team sports, and thrilling murder mystery days. We offer the fairest prices possible so that young people can have the most unforgettable days. We cannot wait to see you at our next event!<br><span class="motto">READY, AIM, BLAST!</span></div>', unsafe_allow_html=True)
         
-        # Add Review Logic
         with st.expander("⭐ Leave a Review"):
             r_name = st.text_input("Name")
             r_stars = st.select_slider("Rating", options=["⭐", "⭐⭐", "⭐⭐⭐", "⭐⭐⭐⭐", "⭐⭐⭐⭐⭐"], value="⭐⭐⭐⭐⭐")
@@ -91,19 +100,30 @@ with col_right:
         for r in st.session_state.user_reviews:
             st.markdown(f'<div class="quote-box">{r["stars"]} "{r["text"]}" - {r["name"]} (Latest)</div>', unsafe_allow_html=True)
 
-    # --- TAB: POSTS ---
+    # --- TAB: POSTS (Significantly More Content) ---
     with tab_posts:
-        posts = [("Ready for Laser Tag? 🔫", "https://images.unsplash.com/photo-1599586120429-48281b6f0ece"), ("Indoor skills at Stouthall today! 🌧️", None)]
-        for i, (txt, img) in enumerate(posts):
+        st.markdown('<div class="section-header">Recent Community Updates</div>', unsafe_allow_html=True)
+        posts_data = [
+            ("The archery range at Stouthall is looking perfect this morning! 🏹", "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b"),
+            ("New laser gear has been delivered to our Swansea office and is heading to Stouthall today! 🔫", "https://images.unsplash.com/photo-1599586120429-48281b6f0ece"),
+            ("Reminder: If the weather turns, we head straight to the indoor facility at Stouthall. 🌧️", None),
+            ("Bushcraft skills in full swing. Fire making is an essential skill! 🔥", "https://images.unsplash.com/photo-1506332800446-0fb3df09358a"),
+            ("Big shoutout to the group from last Saturday! Absolute legends. 🙌", None),
+            ("The Stouthall mansion provides the perfect backdrop for our Murder Mystery days. 🕵️", "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b"),
+            ("Ready, Aim, BLAST! Who is joining us this weekend? 🐝", None)
+        ]
+        for i, (txt, img) in enumerate(posts_data):
             st.markdown(f'<div class="post-card">{txt}</div>', unsafe_allow_html=True)
-            if img: st.image(img, width=400)
-            if st.button(f"👍 {st.session_state.post_likes[i]}", key=f"p_l_{i}"):
+            if img: st.image(img, width=450)
+            col1, col2 = st.columns([1, 4])
+            if col1.button(f"👍 {st.session_state.post_likes[i]}", key=f"feed_l_{i}"):
                 st.session_state.post_likes[i] += 1; st.rerun()
+            if col2.button("🔗 Share", key=f"feed_s_{i}"):
+                st.success("📢 Post Shared!")
 
-    # --- TAB 2: PHOTOS (RE-ADDED CONTENT) ---
+    # --- TAB 2: PHOTOS (All Posters & Action) ---
     with tab2:
         if st.session_state.photo_index is None:
-            st.markdown('<div class="section-header">Gallery</div>', unsafe_allow_html=True)
             cols = st.columns(3)
             for i, (img, title) in enumerate(posters):
                 with cols[i % 3]:
@@ -112,12 +132,12 @@ with col_right:
                         st.session_state.photo_index = i; st.rerun()
         else:
             idx = st.session_state.photo_index
-            st.image(posters[idx][0], width=600, caption=posters[idx][1])
+            st.image(posters[idx][0], width=550, caption=posters[idx][1])
             if st.button("❌ Close Gallery"): st.session_state.photo_index = None; st.rerun()
 
-    # --- TAB 3: BOOKING (FIXED POPUP) ---
+    # --- TAB 3: BOOKING ---
     with tab3:
-        st.markdown('<div class="section-header">Book Your Day Out</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-header">Book Your Stouthall Adventure</div>', unsafe_allow_html=True)
         if st.session_state.booking_step == "select":
             evt = st.selectbox("Activity:", list(event_data.keys()))
             dt = st.selectbox("Date:", event_data[evt])
@@ -127,16 +147,16 @@ with col_right:
                 st.session_state.booking_step = "receipt_confirm"; st.rerun()
         
         elif st.session_state.booking_step == "receipt_confirm":
-            st.success("Booking Details Saved!")
-            if st.button("Yes, Send Receipt to *******@gmail.com"):
+            st.warning("Booking Saved! Do you require a receipt?")
+            if st.button("Yes, Send to *******@gmail.com"):
                 st.session_state.booking_step = "receipt_sent"; st.rerun()
             if st.button("No Receipt, Finish"):
                 st.session_state.my_bookings.append(st.session_state.temp_booking)
                 st.session_state.booking_step = "select"; st.rerun()
 
         elif st.session_state.booking_step == "receipt_sent":
-            st.info("📩 Receipt sent to *******@gmail.com!")
-            if st.button("Return to Booking Page"):
+            st.success("📩 Receipt sent to *******@gmail.com!")
+            if st.button("Return to Booking"):
                 st.session_state.my_bookings.append(st.session_state.temp_booking)
                 st.session_state.booking_step = "select"; st.rerun()
 
@@ -147,16 +167,8 @@ with col_right:
             if st.button(f"Cancel {b['id']}", key=f"del_{i}"):
                 st.session_state.my_bookings.pop(i); st.rerun()
 
-    # --- TAB 5: FAQ (EXPANDED) ---
+    # --- TAB 5: FAQ ---
     with tab5:
         st.markdown('<div class="section-header">FAQ</div>', unsafe_allow_html=True)
-        faqs = [
-            ("What is the wet weather plan?", "We move all activities to our indoor facility at Stouthall."),
-            ("What gear do I need?", "Just sturdy shoes and comfortable clothing. We provide all safety gear."),
-            ("Is there an age limit?", "Events are designed for ages 12-17."),
-            ("Can I get a refund?", "Cancellations made 48 hours in advance are eligible for a full refund."),
-            ("Is food provided?", "We provide water and fruit, but please bring a packed lunch."),
-            ("Are staff trained?", "Yes, all staff are DBS checked and First Aid trained.")
-        ]
-        for q, a in faqs:
-            st.markdown(f'<p class="faq-q">{q}</p><p>{a}</p>', unsafe_allow_html=True)
+        st.write("<b>Why is your office in Swansea but activities at Stouthall?</b><br>Our management team is based in the city, but Stouthall offers the perfect rural terrain for adventure!", unsafe_allow_html=True)
+        st.write("<b>What happens in a downpour?</b><br>We move to our massive indoor facility at Stouthall.", unsafe_allow_html=True)
