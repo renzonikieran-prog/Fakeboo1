@@ -5,7 +5,7 @@ import random
 # --- SYSTEM INITIALIZATION ---
 st.set_page_config(layout="wide", page_title="Blast Hive - Takebook")
 
-# Core Memory
+# Memory Management
 if "photo_index" not in st.session_state:
     st.session_state.photo_index = None
 if "booking_step" not in st.session_state:
@@ -15,7 +15,7 @@ if "my_bookings" not in st.session_state:
 if "user_reviews" not in st.session_state:
     st.session_state.user_reviews = []
 if "post_likes" not in st.session_state:
-    st.session_state.post_likes = [random.randint(10, 500) for _ in range(100)]
+    st.session_state.post_likes = [random.randint(10, 850) for _ in range(100)]
 
 # --- CORRECTED DATE MAPPING ---
 event_data = {
@@ -35,11 +35,11 @@ posters = [
     ("social_play_fest.jpg", "Social Play Fest Poster"),
     ("extreme_impact.jpg", "Extreme Impact Poster"),
     ("skill_switch.jpg", "Skill Switch Poster"),
-    ("https://images.unsplash.com/photo-1599586120429-48281b6f0ece?w=800", "Laser Tag Action"),
-    ("https://images.unsplash.com/photo-1526491109672-74740652b963?w=800", "Bushcraft Skills"),
-    ("https://images.unsplash.com/photo-1511949863663-92c5c06cc0bb?w=800", "Victory Celebration"),
-    ("https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800", "Archery Range"),
-    ("https://images.unsplash.com/photo-1517164850305-99a3e65bb47e?w=800", "Team Puzzles"),
+    ("https://images.unsplash.com/photo-1571333250630-f0230c320b6d?w=800", "Official Archery Gear"),
+    ("https://images.unsplash.com/photo-1526491109672-74740652b963?w=800", "Survival Bushcraft"),
+    ("https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=800", "Group Teamwork"),
+    ("https://images.unsplash.com/photo-1563299796-17596ed6b017?w=800", "Tactical Equipment"),
+    ("https://images.unsplash.com/photo-1517164850305-99a3e65bb47e?w=800", "Problem Solving"),
     ("https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800", "Stouthall Mansion")
 ]
 
@@ -69,7 +69,7 @@ with col_left:
     st.markdown('<div class="content-box"><b>Based in:</b> Swansea.<br><b>All Activities at:</b> Stouthall Country Mansion.<br><b>Wet Weather:</b> Indoor facility at Stouthall.</div>', unsafe_allow_html=True)
     
     st.markdown('<div class="section-header">Join the Hive</div>', unsafe_allow_html=True)
-    st.text_input("Newsletter Signup", key="nl_box")
+    st.text_input("Email", key="nl_box")
     if st.button("Subscribe"): st.toast("Welcome to the Hive! 🐝")
 
     st.markdown('<div class="section-header">Contact Team</div>', unsafe_allow_html=True)
@@ -99,21 +99,49 @@ with col_right:
             st.markdown(f'<div class="quote-box">{r["stars"]} "{r["text"]}" - {r["name"]} (Latest)</div>', unsafe_allow_html=True)
         st.markdown('<div class="quote-box">⭐⭐⭐⭐⭐ "The Target Day at Stouthall was fantastic." - Swansea Parent</div>', unsafe_allow_html=True)
 
-    # --- TAB 2: POSTS (Massive Feed) ---
+    # --- TAB 2: POSTS (35 Posts) ---
     with tab_posts:
-        st.markdown('<div class="section-header">Community Social Feed</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-header">Stouthall Social Feed</div>', unsafe_allow_html=True)
+        
+        # Comprehensive List of 35 Posts
         posts_list = [
-            ("Archery range set up and ready at Stouthall! 🏹", "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600"),
-            ("New high-spec laser tag equipment arrived in Swansea! 🔫", "https://images.unsplash.com/photo-1599586120429-48281b6f0ece?w=600"),
-            ("Morning briefing at the Stouthall Mansion grounds. 🏴󠁧󠁢󠁷󠁬󠁳󠁿", "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600"),
-            ("Bushcraft skills session: Making fire from scratch! 🔥", "https://images.unsplash.com/photo-1526491109672-74740652b963?w=600"),
-            ("Teamwork makes the dream work in today's puzzle challenge! 🧩", "https://images.unsplash.com/photo-1517164850305-99a3e65bb47e?w=600"),
-            ("Victory celebration! Everyone crushed the Adrenaline Weekend. 🙌", "https://images.unsplash.com/photo-1511949863663-92c5c06cc0bb?w=600"),
-            ("Reminder: If it rains, we move to the Stouthall Indoor Arena! 🌧️", None),
-            ("New 'Skill Switch' puzzles are being tested. They are hard! 🧠", None),
-            ("The Target Day gear is 100% sanitized and ready for use. 🧼", None),
-            ("Who is ready for Social Play Fest this Friday? 🐝", None)
+            ("The archery range is looking perfect this morning at Stouthall! 🏹", "https://images.unsplash.com/photo-1571333250630-f0230c320b6d?w=600"),
+            ("New laser gear delivered and ready for Target Day! 🔫", "https://images.unsplash.com/photo-1563299796-17596ed6b017?w=600"),
+            ("Learning to build fire at Stouthall. No matches allowed! 🔥", "https://images.unsplash.com/photo-1526491109672-74740652b963?w=600"),
+            ("The Mansion grounds provide the best terrain for team games. 🏴󠁧󠁢󠁷󠁬󠁳󠁿", "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600"),
+            ("Pure focus during the Skill Switch challenge. 🧠", "https://images.unsplash.com/photo-1517164850305-99a3e65bb47e?w=600"),
+            ("Victory celebration for the morning group! 🙌", "https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=600"),
+            ("Rainy forecast? Don't worry, the Stouthall Indoor Arena is ready! 🌧️", None),
+            ("Another busy Saturday booking up. Secure your slots! 🐝", None),
+            ("Who's joining us for Social Play Fest this Friday? 🥤", None),
+            ("Safety check complete for the Ultimate Challenge equipment. 🛡️", None),
+            ("The view from the Stouthall mansion is incredible today. 😍", "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600"),
+            ("New puzzles are being tested for September's events! 🧩", None),
+            ("Ready, Aim, BLAST! See you all tomorrow. 🚀", None),
+            ("Check out this grouping on the archery target! 🎯", "https://images.unsplash.com/photo-1571333250630-f0230c320b6d?w=600"),
+            ("Lost property: A blue water bottle found at the Stouthall gate. 🍼", None),
+            ("Staff training day: Refreshing our First Aid skills. ✅", None),
+            ("The Gower scenery never gets old during our forest treks. 🌳", "https://images.unsplash.com/photo-1506332800446-0fb3df09358a?w=600"),
+            ("Extreme Impact Day is 100% booked! Thank you! 🏃", None),
+            ("Bushcraft skills: Building shelters that actually stay dry. 🏕️", "https://images.unsplash.com/photo-1526491109672-74740652b963?w=600"),
+            ("Adrenaline Weekend starts now. Let's go! ⚡", None),
+            ("Huge thanks to Bishop Gore for visiting us yesterday! 🏫", None),
+            ("The history of Stouthall makes Murder Mystery days so much better. 🕵️", None),
+            ("Who can solve the 'Skill Switch' puzzle in under 5 minutes? ⏱️", None),
+            ("Lunch break in the sunny mansion gardens. 🍎", None),
+            ("Reminder: All equipment hire is included in the £54.99! 🎟️", None),
+            ("Look at that team coordination on the obstacle course! 🤝", "https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=600"),
+            ("We are an all-inclusive company. Everyone is welcome at the Hive! 🌈", None),
+            ("The sun is out over Swansea and Gower. Perfect day! ☀️", None),
+            ("Check our story for the Target Day highlights later today. 🤳", None),
+            ("Our indoor facility at Stouthall is heated and ready for winter. ❄️", None),
+            ("Quick skills session: Knots and lashings for shelter building. 🪢", None),
+            ("The competition is heating up for the Social Play Fest trophy! 🏆", None),
+            ("Clean gear is happy gear. Sanitizing the laser tag units. 🧼", None),
+            ("Don't forget to tag us in your Stouthall photos! #BlastHive 📸", None),
+            ("Final event of the summer is almost here. Make it count! 🏖️", None)
         ]
+
         for i, (txt, img) in enumerate(posts_list):
             st.markdown(f'<div class="post-card">{txt}</div>', unsafe_allow_html=True)
             if img: st.image(img, width=400)
@@ -137,7 +165,7 @@ with col_right:
             c1, c2, c3 = st.columns(3)
             if c1.button("⬅ Previous"): st.session_state.photo_index = (idx-1)%len(posters); st.rerun()
             if c2.button("Next ➡"): st.session_state.photo_index = (idx+1)%len(posters); st.rerun()
-            if c3.button("❌ Close"): st.session_state.photo_index = None; st.rerun()
+            if c3.button("❌ Close Gallery"): st.session_state.photo_index = None; st.rerun()
 
     # --- TAB 4: BOOKING ---
     with tab3:
@@ -173,10 +201,10 @@ with col_right:
     with tab5:
         st.markdown('<div class="section-header">FAQ</div>', unsafe_allow_html=True)
         faqs = [
-            ("Where is the site?", "All activities take place at Stouthall Country Mansion."),
-            ("What if it rains?", "We use our large indoor facility at Stouthall."),
-            ("What is the price?", "Every activity is £54.99 per person."),
-            ("Are staff trained?", "Yes, all staff are DBS checked and First Aid trained.")
+            ("Where is the site?", "Activities are at Stouthall Mansion, Swansea office is HQ."),
+            ("What if it rains?", "We use our indoor facility at Stouthall."),
+            ("What is the price?", "£54.99 per person for all events."),
+            ("Are staff trained?", "Yes, Enhanced DBS checked and First Aid trained.")
         ]
         for q, a in faqs:
             st.markdown(f'<span class="faq-q">{q}</span><span>{a}</span>', unsafe_allow_html=True)
