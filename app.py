@@ -27,7 +27,7 @@ event_data = {
     "Skill Switch Experience": ["8th", "14th", "21st", "23rd August"]
 }
 
-# 3. VERIFIED GALLERY DATA (Accurate Image Mapping)
+# 3. VERIFIED GALLERY DATA (Posters + Accurate Action Photos)
 posters = [
     ("target_day.jpg", "Target Day Poster"),
     ("adrenaline_weekend.jpg", "Adrenaline Weekend Poster"),
@@ -35,7 +35,7 @@ posters = [
     ("social_play_fest.jpg", "Social Play Fest Poster"),
     ("extreme_impact.jpg", "Extreme Impact Poster"),
     ("skill_switch.jpg", "Skill Switch Poster"),
-    ("https://images.unsplash.com/photo-1511191988486-3d24285e61f4?w=800", "Archery Target & Bow"),
+    ("https://images.unsplash.com/photo-1511191988486-3d24285e61f4?w=800", "Official Archery Target & Bow"),
     ("https://images.unsplash.com/photo-1526491109672-74740652b963?w=800", "Survival Campfire"),
     ("https://images.unsplash.com/photo-1599586120429-48281b6f0ece?w=800", "Tactical Laser Gear"),
     ("https://images.unsplash.com/photo-1511949863663-92c5c06cc0bb?w=800", "Outdoor Victory Celebration"),
@@ -52,7 +52,6 @@ st.markdown("""
     .stat-bar { background-color: #f0f2f5; padding: 10px; display: flex; justify-content: space-around; border: 1px solid #dddfe2; border-radius: 4px; margin-bottom: 15px; }
     .post-card { border: 1px solid #dddfe2; background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 5px; font-weight: bold; }
     .motto { color: #adb9d3; font-weight: bold; font-size: 22px; text-align: center; display: block; margin-top: 20px; letter-spacing: 3px; }
-    .price-tag { color: #2e7d32; font-size: 26px; font-weight: bold; }
     .faq-q { font-weight: bold; color: #adb9d3; margin-top: 10px; display: block; }
     </style>
     """, unsafe_allow_html=True)
@@ -66,17 +65,16 @@ with col_left:
     if os.path.exists("image_83c146.jpg"):
         st.image("image_83c146.jpg", use_container_width=True)
     st.markdown('<div class="section-header">Basic Information</div>', unsafe_allow_html=True)
-    st.markdown('<div class="content-box"><b>Business HQ:</b> Swansea.<br><b>Activity Site:</b> Stouthall Country Mansion.<br><b>Wet Weather:</b> Indoor arena at Stouthall.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="content-box"><b>Business Hub:</b> Swansea.<br><b>Activity Site:</b> Stouthall Country Mansion.<br><b>Wet Weather:</b> Indoor arena at Stouthall.</div>', unsafe_allow_html=True)
     
-    # Newsletter Box
     st.markdown('<div class="section-header">Join the Hive</div>', unsafe_allow_html=True)
-    st.text_input("Newsletter Signup", placeholder="email@example.com", key="sidebar_nl")
+    st.text_input("Newsletter Subscription", placeholder="your@email.com", key="nl_box")
     if st.button("Subscribe"): st.toast("Welcome to the Hive! 🐝")
 
     st.markdown('<div class="section-header">Contact Our Team</div>', unsafe_allow_html=True)
     with st.expander("Message Us"):
-        st.text_input("Your Name", key="side_msg_n")
-        if st.button("Send"): st.success("Sent!")
+        st.text_input("Name", key="side_msg_n")
+        if st.button("Send Message"): st.success("Sent!")
 
 with col_right:
     tab1, tab_posts, tab2, tab3, tab4, tab5 = st.tabs(["📄 Info", "📰 Posts", "🖼️ Photos", "🎟️ Book Now!", "📅 My Bookings", "❓ FAQ"])
@@ -105,31 +103,26 @@ with col_right:
     with tab_posts:
         st.markdown('<div class="section-header">Stouthall Activity Feed</div>', unsafe_allow_html=True)
         
-        # Defining 35 posts with varied images and text
         posts_content = [
-            ("Archery range set up at Stouthall! Who is going for the bulls-eye today? 🏹", "https://images.unsplash.com/photo-1511191988486-3d24285e61f4?w=600"),
-            ("Survival mastery: Learning the ancient art of fire lighting at Stouthall. 🔥", "https://images.unsplash.com/photo-1526491109672-74740652b963?w=600"),
-            ("Our high-spec laser tags are sanitized and ready for the weekend. 🔫", "https://images.unsplash.com/photo-1599586120429-48281b6f0ece?w=600"),
-            ("Victory celebration! Everyone crushed the Adrenaline Challenge. 🙌", "https://images.unsplash.com/photo-1511949863663-92c5c06cc0bb?w=600"),
-            ("Logic puzzles in full swing under the Stouthall mansion trees. 🧠", "https://images.unsplash.com/photo-1517164850305-99a3e65bb47e?w=600"),
-            ("The Mansion grounds provide the best terrain for team games. 🏴󠁧󠁢󠁷󠁬󠁳󠁿", "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600"),
-            ("Reminder: Rainy forecast? We move to the Stouthall Indoor Arena! 🌧️", None),
-            ("Check out this bulls-eye grouping! Pure focus. 🎯", "https://images.unsplash.com/photo-1511191988486-3d24285e61f4?w=600"),
-            ("Bushcraft skills: Building shelters that actually stay dry. 🏕️", "https://images.unsplash.com/photo-1526491109672-74740652b963?w=600"),
-            ("Clean gear is happy gear. Sanitizing units for tomorrow. 🧼", None),
-            ("Ready, Aim, BLAST! See you all for Friday Fest. 🐝", None)
+            ("The archery range is looking perfect! Ready for bulls-eye practice at Stouthall. 🏹", "https://images.unsplash.com/photo-1511191988486-3d24285e61f4?w=600"),
+            ("Survival skills: Building the perfect campfire at Stouthall. 🔥", "https://images.unsplash.com/photo-1526491109672-74740652b963?w=600"),
+            ("High-spec laser equipment is ready for the Adrenaline Weekend! 🔫", "https://images.unsplash.com/photo-1599586120429-48281b6f0ece?w=600"),
+            ("Victory celebration! Everyone crushed the Extreme Impact challenge. 🙌", "https://images.unsplash.com/photo-1511949863663-92c5c06cc0bb?w=600"),
+            ("Team logic puzzles under the trees. Who will solve it first? 🧠", "https://images.unsplash.com/photo-1517164850305-99a3e65bb47e?w=600"),
+            ("The grounds at Stouthall mansion are incredible today. 🏴󠁧󠁢󠁷󠁬󠁳󠁿", "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600")
         ]
-        filler_posts = ["Special discounts for groups of 10+!", "New puzzles added to Skill Switch.", "Staff training day complete!", "Sunset over the Stouthall estate."]
+        # Filler to reach 35 posts
+        filler_txt = ["Special group discounts available!", "Staff training complete!", "New puzzles added to Skill Switch!", "Check out our indoor arena if it rains."]
         for i in range(len(posts_content), 35):
-            posts_content.append((random.choice(filler_posts), None))
+            posts_content.append((random.choice(filler_txt), None))
 
         for i, (txt, img) in enumerate(posts_content):
             st.markdown(f'<div class="post-card">{txt}</div>', unsafe_allow_html=True)
             if img: st.image(img, width=420)
             c1, c2 = st.columns([1, 4])
-            if c1.button(f"👍 {st.session_state.post_likes[i]}", key=f"feed_pl_{i}"):
+            if c1.button(f"👍 {st.session_state.post_likes[i]}", key=f"f_l_{i}"):
                 st.session_state.post_likes[i] += 1; st.rerun()
-            if c2.button("🔗 Share", key=f"feed_ps_{i}"): st.success("📢 Post Shared!")
+            if c2.button("🔗 Share", key=f"f_s_{i}"): st.success("📢 Post Shared!")
 
     # --- TAB 3: PHOTOS (Gallery Nav Fixed) ---
     with tab2:
@@ -138,7 +131,7 @@ with col_right:
             for i, (img, title) in enumerate(posters):
                 with cols[i % 3]:
                     st.image(img, use_container_width=True)
-                    if st.button(f"View {title}", key=f"v_gal_{i}"):
+                    if st.button(f"View {title}", key=f"gal_v_{i}"):
                         st.session_state.photo_index = i; st.rerun()
         else:
             idx = st.session_state.photo_index
@@ -148,7 +141,7 @@ with col_right:
             if c2.button("Next ➡"): st.session_state.photo_index = (idx+1)%len(posters); st.rerun()
             if c3.button("❌ Close Gallery"): st.session_state.photo_index = None; st.rerun()
 
-    # --- TAB 4: BOOKING & RECEIPT ---
+    # --- TAB 4: BOOKING & GMAIL RECEIPT ---
     with tab3:
         st.markdown('<div class="section-header">Book Your Adventure - £54.99</div>', unsafe_allow_html=True)
         if st.session_state.booking_step == "select":
@@ -173,9 +166,10 @@ with col_right:
 
     # --- TAB 5: MY BOOKINGS ---
     with tab4:
+        st.markdown('<div class="section-header">My Active Schedule</div>', unsafe_allow_html=True)
         for i, b in enumerate(st.session_state.my_bookings):
             st.markdown(f'<div class="content-box">🎯 {b["event"]} - {b["date"]}</div>', unsafe_allow_html=True)
-            if st.button(f"Cancel {b['id']}", key=f"cb_del_{i}"):
+            if st.button(f"Cancel Booking {b['id']}", key=f"del_b_{i}"):
                 st.session_state.my_bookings.pop(i); st.rerun()
 
     # --- TAB 6: FAQ ---
