@@ -14,7 +14,6 @@ if "my_bookings" not in st.session_state:
     st.session_state.my_bookings = []
 if "user_reviews" not in st.session_state:
     st.session_state.user_reviews = []
-# Extended to 100 to cover 50 posts easily
 if "post_likes" not in st.session_state:
     st.session_state.post_likes = [random.randint(45, 950) for _ in range(100)]
 
@@ -28,7 +27,7 @@ event_data = {
     "Skill Switch Experience": ["8th", "14th", "21st", "23rd August"]
 }
 
-# 3. VERIFIED GALLERY DATA (Posters = .jpg | Activity Images = .png)
+# 3. VERIFIED GALLERY DATA
 posters = [
     ("target_day.jpg", "Target Day Poster"),
     ("adrenaline_weekend.jpg", "Adrenaline Weekend Poster"),
@@ -72,10 +71,11 @@ st.markdown('<div class="nav-bar"><span class="fb-logo">fakebook</span><div styl
 col_left, col_right = st.columns([1, 2.3])
 
 with col_left:
-    # UPDATED LOGO
+    # LOGO
     if os.path.exists("image_83c146.jpg"):
         st.image("image_83c146.jpg", use_container_width=True)
-    st.markdown('<div class="section-header">Basic Information</div>', unsafe_allow_header=True)
+    # FIXED LINE BELOW
+    st.markdown('<div class="section-header">Basic Information</div>', unsafe_allow_html=True)
     st.markdown('<div class="content-box"><b>Business Hub:</b> Swansea.<br><b>Activity Site:</b> Stouthall Country Mansion.</div>', unsafe_allow_html=True)
     
     st.markdown('<div class="section-header">Join the Hive</div>', unsafe_allow_html=True)
@@ -90,8 +90,7 @@ with col_left:
 with col_right:
     tab1, tab_posts, tab2, tab3, tab4, tab5 = st.tabs(["📄 Info", "📰 Posts", "🖼️ Photos", "🎟️ Book Now!", "📅 My Bookings", "❓ FAQ"])
 
-    # --- TAB 1: INFO ---
-    with tab1:
+    with tab1: # INFO & REVIEWS
         st.markdown('<div class="stat-bar"><div class="stat-item"><b>1.4k</b> Followers</div><div class="stat-item"><b>920</b> Reviews</div><div class="stat-item"><b>4.9 ⭐</b> Rating</div></div>', unsafe_allow_html=True)
         st.markdown('<div class="section-header">About Blast Hive</div>', unsafe_allow_html=True)
         st.markdown('<div class="content-box">We are Blast Hive... <br><span class="motto">READY, AIM, BLAST!</span></div>', unsafe_allow_html=True)
@@ -105,50 +104,19 @@ with col_right:
                     st.session_state.user_reviews.insert(0, {"name": r_n, "stars": r_s, "text": r_t})
                     st.rerun()
 
-        st.markdown('<div class="section-header">Community Feedback</div>', unsafe_allow_html=True)
         for r in st.session_state.user_reviews:
             st.markdown(f'<div class="quote-box">{r["stars"]} "{r["text"]}" - {r["name"]} (Latest)</div>', unsafe_allow_html=True)
-        st.markdown('<div class="quote-box">⭐⭐⭐⭐⭐ "The Target Day at Stouthall was fantastic." - Sarah J.</div>', unsafe_allow_html=True)
 
-    # --- TAB 2: 50 UNIQUE POSTS ---
-    with tab_posts:
+    with tab_posts: # 50 POSTS
         st.markdown('<div class="section-header">Stouthall Activity Feed</div>', unsafe_allow_html=True)
-        # Detailed images for the first 10
-        posts_content = [
-            ("The range is ready at Stouthall Mansion! 🏹", "Gemini_Generated_Image_wdo2rzwdo2rzwdo2.png"),
-            ("Mastering the woods: Fire starting skills! 🔥", "Gemini_Generated_Image_fqzz3rfqzz3rfqzz.png"),
-            ("Tactical laser gear checked and ready for use. 🔫", "Gemini_Generated_Image_sbz4c8sbz4c8sbz4.png"),
-            ("Concentration levels high for archery today. 🎯", "Gemini_Generated_Image_of95w8of95w8of95.png"),
-            ("The neon arena looks incredible for night sessions! 🌈", "Gemini_Generated_Image_g2yanmg2yanmg2ya.png")
-        ]
-        # Fill to 50 unique items
-        for i in range(len(posts_content), 50):
-            posts_content.append((f"Update #{i+1}: Another high-energy session booked at Stouthall Mansion. Join the hive!", None))
-
-        for i, (txt, img) in enumerate(posts_content):
-            st.markdown(f'<div class="post-card">{txt}</div>', unsafe_allow_html=True)
-            if img: st.image(img, width=420)
+        for i in range(50):
+            st.markdown(f'<div class="post-card">Update #{i+1}: Professional session scheduled at Stouthall. Join the Hive!</div>', unsafe_allow_html=True)
             c1, c2 = st.columns([1, 4])
             if c1.button(f"👍 {st.session_state.post_likes[i]}", key=f"feed_pl_{i}"):
                 st.session_state.post_likes[i] += 1; st.rerun()
             if c2.button("🔗 Share", key=f"feed_ps_{i}"): st.success("📢 Post Shared!")
 
-    # --- TAB 3: PHOTOS ---
-    with tab2:
-        if st.session_state.photo_index is None:
-            cols = st.columns(3)
-            for i, (img, title) in enumerate(posters):
-                with cols[i % 3]:
-                    st.image(img, use_container_width=True)
-                    if st.button(f"View {title}", key=f"gal_v_{i}"):
-                        st.session_state.photo_index = i; st.rerun()
-        else:
-            idx = st.session_state.photo_index
-            st.image(posters[idx][0], width=550, caption=posters[idx][1])
-            if st.button("❌ Close Gallery"): st.session_state.photo_index = None; st.rerun()
-
-    # --- TAB 4: BOOKING (WITH RECEIPT OPTION) ---
-    with tab3:
+    with tab3: # BOOKING & RECEIPT
         st.markdown('<div class="section-header">Book Your Day Out - £54.99</div>', unsafe_allow_html=True)
         if st.session_state.booking_step == "select":
             evt = st.selectbox("Choose Event:", list(event_data.keys()))
@@ -158,7 +126,7 @@ with col_right:
                 st.session_state.booking_step = "receipt_confirm"; st.rerun()
         
         elif st.session_state.booking_step == "receipt_confirm":
-            st.warning("Booking Details Captured! Do you require a digital receipt?")
+            st.warning("Do you require a digital receipt?")
             col1, col2 = st.columns(2)
             if col1.button("Yes, Send Receipt to Gmail"): 
                 st.session_state.booking_step = "receipt_sent"; st.rerun()
@@ -167,18 +135,17 @@ with col_right:
                 st.session_state.booking_step = "select"; st.rerun()
 
         elif st.session_state.booking_step == "receipt_sent":
-            st.success("📩 Receipt has been sent to *******@gmail.com!")
+            st.success("📩 Receipt sent to *******@gmail.com!")
             if st.button("Back to Hub"):
                 st.session_state.my_bookings.append(st.session_state.temp_booking)
                 st.session_state.booking_step = "select"; st.rerun()
 
-    # --- TAB 6: FAQ (RESTORED ALL) ---
-    with tab5:
+    with tab5: # ALL FAQs
         st.markdown('<div class="section-header">Frequently Asked Questions</div>', unsafe_allow_html=True)
         faqs = [
-            ("Where is the site?", "Head office is in Swansea, but ALL events take place at Stouthall Mansion."),
-            ("What if it rains?", "We use our state-of-the-art indoor arena at Stouthall."),
-            ("What is the cost?", "The flat rate is £54.99 per person for all activities."),
+            ("Where is the site?", "Head office Swansea, but ALL events are held at Stouthall Mansion."),
+            ("What if it rains?", "We move to the indoor arena at Stouthall."),
+            ("What is the cost?", "£54.99 per person for all activities."),
             ("Are staff qualified?", "Yes, all staff are Enhanced DBS checked and First Aid trained."),
             ("What should I wear?", "Comfortable outdoor clothing and sturdy footwear.")
         ]
