@@ -28,9 +28,9 @@ if "post_likes" not in st.session_state:
 if "sent_messages" not in st.session_state:
     st.session_state.sent_messages = []
 
-# 3. CONTENT MAPPING
+# 3. CONTENT MAPPING (Explicitly including image(1).png)
 activity_content = [
-    ("image(1).png", "TARGET DAY 2026: The ultimate multi-activity experience. 🎯 £54.99 All-Inclusive."),
+    ("image(1).png", "TARGET DAY 2026: Axe Throwing, Airsoft, Paintball, and Laser Tag. 🎯 £54.99 All-Inclusive."),
     ("Gemini_Generated_Image_wdo2rzwdo2rzwdo2.png", "Professional archery range setup at Stouthall. 🏹"),
     ("Gemini_Generated_Image_fqzz3rfqzz3rfqzz.png", "Mastering survival skills in the deep woods. 🔥"),
     ("Gemini_Generated_Image_sbz4c8sbz4c8sbz4.png", "Elite tactical gear ready for the field. 🔫"),
@@ -76,7 +76,7 @@ with col_left:
     if os.path.exists("image_83c146.jpg"):
         st.image("image_83c146.jpg", use_container_width=True)
     st.markdown('<div class="section-header">Basic Information</div>', unsafe_allow_html=True)
-    st.markdown('<div class="content-box"><b>Business Hub:</b> Swansea.<br><b>Activity Site:</b> Stouthall Mansion.<br><b>Target Day Rate:</b> £54.99 per person.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="content-box"><b>Hub:</b> Swansea.<br><b>Site:</b> Stouthall Mansion.<br><b>Target Day Rate:</b> £54.99 per person.</div>', unsafe_allow_html=True)
     
     st.text_input("Newsletter Signup", placeholder="email@example.com", key="side_nl")
     if st.button("Subscribe"): st.toast("Welcome to the Hive! 🐝")
@@ -93,33 +93,18 @@ with col_right:
     tab1, tab_posts, tab2, tab3, tab4, tab5 = st.tabs(["📄 Info", "📰 Posts", "🖼️ Photos", "🎟️ Book Now!", "📅 My Bookings", "❓ FAQ"])
 
     with tab1: # ABOUT
-        st.markdown(f'''
-            <div class="stat-bar">
-                <div class="stat-item"><span class="stat-value">1,428</span>Followers</div>
-                <div class="stat-item"><span class="stat-value">914</span>Check-ins</div>
-                <div class="stat-item"><span class="stat-value">4.9 ⭐</span>Overall Rating</div>
-            </div>
-        ''', unsafe_allow_html=True)
-        
-        st.markdown('<div class="section-header">Our Story: The Blast Hive Experience</div>', unsafe_allow_html=True)
-        st.markdown('''
-            <div class="content-box">
-                Welcome to <b>Blast Hive</b>, South Wales' premier destination for high-octane adventure. 
-                Based at the historic 30-acre <b>Stouthall Country Mansion</b>, we provide professional-grade tactical 
-                challenges, survival skills, and team-building events.
-                <br><br>
-                Our <b>Target Day</b> event is our flagship summer festival, bringing together the best of our activities 
-                into one elite day of competition. For a flat rate of <b>£54.99</b>, attendees get full access to 
-                axe throwing, airsoft, and our famous neon tactical arena.
-            </div>
-        ''', unsafe_allow_html=True)
-        
+        st.markdown(f'''<div class="stat-bar">
+            <div class="stat-item"><span class="stat-value">1,428</span>Followers</div>
+            <div class="stat-item"><span class="stat-value">914</span>Check-ins</div>
+            <div class="stat-item"><span class="stat-value">4.9 ⭐</span>Overall Rating</div>
+        </div>''', unsafe_allow_html=True)
+        st.markdown('<div class="section-header">The Blast Hive Experience</div>', unsafe_allow_html=True)
+        st.markdown('<div class="content-box">South Wales\' premier adventure provider at the historic 30-acre Stouthall Mansion. Experience the adrenaline of axe throwing, airsoft, and tactical combat for a flat rate of £54.99.</div>', unsafe_allow_html=True)
         for r in st.session_state.user_reviews:
             st.markdown(f'<div class="content-box">{r["stars"]} "{r["text"]}" - {r["name"]}</div>', unsafe_allow_html=True)
-        
         st.markdown('<div class="big-motto">Ready, Aim, Blast!</div>', unsafe_allow_html=True)
 
-    with tab_posts: # POSTS
+    with tab_posts: # 55 POSTS (image(1).png is always first)
         for i in range(55):
             st.markdown('<div class="post-card">', unsafe_allow_html=True)
             img, cap = activity_content[i % len(activity_content)]
@@ -131,10 +116,9 @@ with col_right:
                 st.rerun()
             st.markdown('</div>', unsafe_allow_html=True)
 
-    with tab2: # PHOTO GALLERY
-        st.markdown('<div class="section-header">Target Day Gallery</div>', unsafe_allow_html=True)
+    with tab2: # PHOTO GALLERY (image(1).png included)
+        cols = st.columns(3)
         if st.session_state.photo_index is None:
-            cols = st.columns(3)
             for i, (img, title) in enumerate(activity_content):
                 with cols[i % 3]:
                     if os.path.exists(img):
@@ -149,20 +133,12 @@ with col_right:
                 st.session_state.photo_index = None
                 st.rerun()
 
-    with tab3: # BOOKING
-        st.markdown('<div class="section-header">Target Day Booking - £54.99</div>', unsafe_allow_html=True)
-        dt = st.selectbox("Select Date (August 4th-11th):", ["4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th"])
-        if st.button("Reserve Ticket"):
-            st.session_state.my_bookings.append({"event": "Target Day", "date": f"{dt} August", "id": f"BH-{random.randint(1000, 9999)}"})
-            st.success(f"Reserved for August {dt}!")
-
     with tab5: # FAQs
         st.markdown('<div class="section-header">Target Day FAQ</div>', unsafe_allow_html=True)
         faqs = [
-            ("What is Target Day?", "A premiere multi-activity event featuring archery, airsoft, and tactical laser tag."),
-            ("What are the dates?", "Exclusive booking is available from August 4th to August 11th, 2026."),
-            ("What is the cost?", "The all-inclusive flat rate is £54.99 per person."),
-            ("Where is it held?", "All activities take place at Stouthall Country Mansion, South Wales.")
+            ("What is Target Day?", "A multi-activity event at Stouthall Mansion."),
+            ("What is the cost?", "£54.99 all-inclusive."),
+            ("When is it?", "August 4th - August 11th, 2026.")
         ]
         for q, a in faqs:
             st.markdown(f'<span class="faq-q">{q}</span><span>{a}</span>', unsafe_allow_html=True)
