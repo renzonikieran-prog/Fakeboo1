@@ -76,12 +76,13 @@ with col_left:
     if os.path.exists("image_83c146.jpg"):
         st.image("image_83c146.jpg", use_container_width=True)
     st.markdown('<div class="section-header">Basic Information</div>', unsafe_allow_html=True)
-    st.markdown('<div class="content-box"><b>Hub:</b> Swansea.<br><b>Site:</b> Stouthall Mansion.<br><b>Rate:</b> £54.99 per person.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="content-box"><b>Hub:</b> Swansea.<br><b>Site:</b> Stouthall Mansion.<br><b>Rate:</b> £54.99 per booking.</div>', unsafe_allow_html=True)
     
+    # Newsletter & Messaging
     st.text_input("Newsletter Signup", placeholder="email@example.com", key="side_nl")
     if st.button("Subscribe"): st.toast("Welcome to the Hive! 🐝")
     
-    with st.expander("Message Team"):
+    with st.expander("Message Us"):
         m_name = st.text_input("Name", key="m_n")
         m_text = st.text_area("Message", key="m_t")
         if st.button("Send"):
@@ -92,16 +93,29 @@ with col_left:
 with col_right:
     tab1, tab_posts, tab2, tab3, tab4, tab5 = st.tabs(["📄 Info", "📰 Posts", "🖼️ Photos", "🎟️ Book Now!", "📅 My Bookings", "❓ FAQ"])
 
-    with tab1: # ABOUT & REVIEWS
+    with tab1: # UPDATED ABOUT SECTION
         st.markdown(f'''<div class="stat-bar">
             <div class="stat-item"><span class="stat-value">1,428</span>Followers</div>
             <div class="stat-item"><span class="stat-value">914</span>Check-ins</div>
             <div class="stat-item"><span class="stat-value">4.9 ⭐</span>Overall Rating</div>
         </div>''', unsafe_allow_html=True)
-        st.markdown('<div class="section-header">Our Vision: The Blast Hive Standard</div>', unsafe_allow_html=True)
-        st.markdown('<div class="content-box">Blast Hive is South Wales\' premier destination for tactical adventure at <b>Stouthall Mansion</b>. Our 2026 <b>Target Day</b> brings together axe throwing, airsoft, paintball, and laser tag for an all-inclusive flat rate of <b>£54.99</b>.</div>', unsafe_allow_html=True)
+        
+        st.markdown('<div class="section-header">About Blast Hive</div>', unsafe_allow_html=True)
+        st.markdown('''
+            <div class="content-box">
+                We are Blast Hive, and we want to give you children the experience of your lives. 
+                We invite you to our target day in Stouthall from 4th August - 11th August. 
+                Our payment rates are £54.99 per booking to ensure premium experiences for the beloved people of South Wales. 
+                Our staff cannot wait to see what excitement you will bring to laser tag and even the marksman archers among you.
+                <br><br>
+                - The Blast Hive team.
+            </div>
+        ''', unsafe_allow_html=True)
+        
+        st.markdown('<div class="section-header">Community Feedback</div>', unsafe_allow_html=True)
         for r in st.session_state.user_reviews:
             st.markdown(f'<div class="content-box">{r["stars"]} "{r["text"]}" - {r["name"]}</div>', unsafe_allow_html=True)
+        
         st.markdown('<div class="big-motto">Ready, Aim, Blast!</div>', unsafe_allow_html=True)
 
     with tab_posts: # 55 POSTS
@@ -135,12 +149,12 @@ with col_right:
 
     with tab3: # BOOK NOW
         st.markdown('<div class="section-header">Target Day Booking - £54.99</div>', unsafe_allow_html=True)
-        dt = st.selectbox("Select Date (August 4th-11th):", ["4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th"])
+        dt = st.selectbox("Select Date:", ["4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th"])
         if st.button("Reserve Ticket"):
             st.session_state.my_bookings.append({"event": "Target Day", "date": f"{dt} August", "id": f"BH-{random.randint(1000, 9999)}"})
             st.success(f"Reserved! Check 'My Bookings' tab.")
 
-    with tab4: # RESTORED MY BOOKINGS
+    with tab4: # MY BOOKINGS
         st.markdown('<div class="section-header">Active Reservations</div>', unsafe_allow_html=True)
         if not st.session_state.my_bookings:
             st.info("You have no active bookings.")
