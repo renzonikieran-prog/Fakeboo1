@@ -28,7 +28,7 @@ if "post_likes" not in st.session_state:
 if "sent_messages" not in st.session_state:
     st.session_state.sent_messages = []
 
-# 3. CONTENT MAPPING (Explicitly using poster.jpg)
+# 3. CONTENT MAPPING
 activity_content = [
     ("poster.jpg", "TARGET DAY 2026: Axe Throwing, Airsoft, Paintball, and Laser Tag. 🎯 £54.99 All-Inclusive."),
     ("Gemini_Generated_Image_wdo2rzwdo2rzwdo2.png", "The archery range is looking perfect this morning at Stouthall. 🏹"),
@@ -76,62 +76,35 @@ with col_left:
     if os.path.exists("image_83c146.jpg"):
         st.image("image_83c146.jpg", use_container_width=True)
     st.markdown('<div class="section-header">Basic Information</div>', unsafe_allow_html=True)
-    st.markdown('<div class="content-box"><b>Hub:</b> Swansea.<br><b>Site:</b> Stouthall Mansion.<br><b>Target Day Rate:</b> £54.99 per person.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="content-box"><b>Hub:</b> Swansea.<br><b>Site:</b> Stouthall Mansion.<br><b>Rate:</b> £54.99 per person.</div>', unsafe_allow_html=True)
     
-    st.markdown('<div class="section-header">Join the Hive</div>', unsafe_allow_html=True)
     st.text_input("Newsletter Signup", placeholder="email@example.com", key="side_nl")
     if st.button("Subscribe"): st.toast("Welcome to the Hive! 🐝")
     
-    st.markdown('<div class="section-header">Contact Our Team</div>', unsafe_allow_html=True)
-    with st.expander("Message Us"):
+    with st.expander("Message Team"):
         m_name = st.text_input("Name", key="m_n")
         m_text = st.text_area("Message", key="m_t")
-        if st.button("Send Message"):
+        if st.button("Send"):
             if m_name and m_text:
                 st.session_state.sent_messages.insert(0, f"<b>{m_name}:</b> {m_text}")
                 st.rerun()
-    for m in st.session_state.sent_messages:
-        st.markdown(f'<div class="content-box" style="font-size:10px;">{m}</div>', unsafe_allow_html=True)
 
 with col_right:
     tab1, tab_posts, tab2, tab3, tab4, tab5 = st.tabs(["📄 Info", "📰 Posts", "🖼️ Photos", "🎟️ Book Now!", "📅 My Bookings", "❓ FAQ"])
 
-    with tab1: # ABOUT SECTION & REVIEWS
+    with tab1: # ABOUT & REVIEWS
         st.markdown(f'''<div class="stat-bar">
             <div class="stat-item"><span class="stat-value">1,428</span>Followers</div>
             <div class="stat-item"><span class="stat-value">914</span>Check-ins</div>
             <div class="stat-item"><span class="stat-value">4.9 ⭐</span>Overall Rating</div>
         </div>''', unsafe_allow_html=True)
-        
         st.markdown('<div class="section-header">Our Vision: The Blast Hive Standard</div>', unsafe_allow_html=True)
-        st.markdown('''
-            <div class="content-box">
-                <b>Blast Hive</b> is South Wales' premier destination for high-intensity adventure and tactical outdoor education. 
-                Based at the historic 30-acre <b>Stouthall Country Mansion</b>, we provide an escape from the ordinary with 
-                elite challenges designed to foster resilience and leadership.
-                <br><br>
-                Our 2026 <b>Target Day</b> festival brings together the absolute best of our activities. For a flat rate of 
-                <b>£54.99</b>, guests enjoy all-inclusive access to axe throwing, airsoft, paintball, and tactical laser tag. 
-                Whether competing in our dense survival woods or the state-of-the-art neon tactical arena, the Hive 
-                delivers an unmatched adrenaline experience.
-            </div>
-        ''', unsafe_allow_html=True)
-        
-        st.markdown('<div class="section-header">Community Feedback</div>', unsafe_allow_html=True)
-        with st.expander("⭐ Post a Review"):
-            r_n = st.text_input("Reviewer Name")
-            r_s = st.select_slider("Rating", options=["⭐", "⭐⭐", "⭐⭐⭐", "⭐⭐⭐⭐", "⭐⭐⭐⭐⭐"], value="⭐⭐⭐⭐⭐")
-            r_t = st.text_area("Experience Details")
-            if st.button("Post Review"):
-                if r_n and r_t:
-                    st.session_state.user_reviews.insert(0, {"name": r_n, "stars": r_s, "text": r_t})
-                    st.rerun()
+        st.markdown('<div class="content-box">Blast Hive is South Wales\' premier destination for tactical adventure at <b>Stouthall Mansion</b>. Our 2026 <b>Target Day</b> brings together axe throwing, airsoft, paintball, and laser tag for an all-inclusive flat rate of <b>£54.99</b>.</div>', unsafe_allow_html=True)
         for r in st.session_state.user_reviews:
             st.markdown(f'<div class="content-box">{r["stars"]} "{r["text"]}" - {r["name"]}</div>', unsafe_allow_html=True)
-        
         st.markdown('<div class="big-motto">Ready, Aim, Blast!</div>', unsafe_allow_html=True)
 
-    with tab_posts: # POSTS
+    with tab_posts: # 55 POSTS
         for i in range(55):
             st.markdown('<div class="post-card">', unsafe_allow_html=True)
             img, cap = activity_content[i % len(activity_content)]
@@ -144,7 +117,6 @@ with col_right:
             st.markdown('</div>', unsafe_allow_html=True)
 
     with tab2: # PHOTO GALLERY
-        st.markdown('<div class="section-header">Target Day Gallery</div>', unsafe_allow_html=True)
         if st.session_state.photo_index is None:
             cols = st.columns(3)
             for i, (img, title) in enumerate(activity_content):
@@ -161,20 +133,26 @@ with col_right:
                 st.session_state.photo_index = None
                 st.rerun()
 
-    with tab3: # BOOKING
+    with tab3: # BOOK NOW
         st.markdown('<div class="section-header">Target Day Booking - £54.99</div>', unsafe_allow_html=True)
         dt = st.selectbox("Select Date (August 4th-11th):", ["4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th"])
         if st.button("Reserve Ticket"):
             st.session_state.my_bookings.append({"event": "Target Day", "date": f"{dt} August", "id": f"BH-{random.randint(1000, 9999)}"})
-            st.success(f"Reserved for August {dt}!")
+            st.success(f"Reserved! Check 'My Bookings' tab.")
 
-    with tab5: # FAQs
-        st.markdown('<div class="section-header">Frequently Asked Questions</div>', unsafe_allow_html=True)
-        faqs = [
-            ("What is Target Day?", "A multi-activity tactical event at Stouthall Mansion."),
-            ("What is the cost?", "£54.99 all-inclusive per person."),
-            ("When is it?", "August 4th - August 11th, 2026.")
-        ]
+    with tab4: # RESTORED MY BOOKINGS
+        st.markdown('<div class="section-header">Active Reservations</div>', unsafe_allow_html=True)
+        if not st.session_state.my_bookings:
+            st.info("You have no active bookings.")
+        else:
+            for i, b in enumerate(st.session_state.my_bookings):
+                st.markdown(f'<div class="content-box"><b>{b["event"]}</b><br>Date: {b["date"]}<br>ID: {b["id"]}</div>', unsafe_allow_html=True)
+                if st.button(f"Cancel Reservation {b['id']}", key=f"del_b_{i}"):
+                    st.session_state.my_bookings.pop(i)
+                    st.rerun()
+
+    with tab5: # FAQ
+        st.markdown('<div class="section-header">Target Day FAQ</div>', unsafe_allow_html=True)
+        faqs = [("Cost?", "£54.99."), ("Dates?", "Aug 4-11."), ("Where?", "Stouthall Mansion.")]
         for q, a in faqs:
             st.markdown(f'<span class="faq-q">{q}</span><span>{a}</span>', unsafe_allow_html=True)
-            
