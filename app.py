@@ -7,7 +7,6 @@ from datetime import datetime
 st.set_page_config(layout="wide", page_title="Blast Hive - Fakebook")
 
 # 1. LIVE DATA LOGIC
-# Event starts August 4th, 2026
 target_date = datetime(2026, 8, 4)
 now = datetime.now()
 delta = target_date - now
@@ -29,9 +28,9 @@ if "post_likes" not in st.session_state:
 if "sent_messages" not in st.session_state:
     st.session_state.sent_messages = []
 
-# 3. CONTENT MAPPING (Poster + Activities)
+# 3. CONTENT MAPPING (Explicitly using poster.jpg)
 activity_content = [
-    ("image(1).png", "TARGET DAY 2026: Axe Throwing, Airsoft, Paintball, and Laser Tag. 🎯 £54.99 All-Inclusive."),
+    ("poster.jpg", "TARGET DAY 2026: Axe Throwing, Airsoft, Paintball, and Laser Tag. 🎯 £54.99 All-Inclusive."),
     ("Gemini_Generated_Image_wdo2rzwdo2rzwdo2.png", "The archery range is looking perfect this morning at Stouthall. 🏹"),
     ("Gemini_Generated_Image_fqzz3rfqzz3rfqzz.png", "Mastering the art of fire-lighting in the deep woods. 🔥 #Bushcraft"),
     ("Gemini_Generated_Image_sbz4c8sbz4c8sbz4.png", "New tactical laser gear has arrived and is ready for the Hive. 🔫"),
@@ -132,7 +131,7 @@ with col_right:
         
         st.markdown('<div class="big-motto">Ready, Aim, Blast!</div>', unsafe_allow_html=True)
 
-    with tab_posts: # POSTS (55 items, image(1).png is index 0)
+    with tab_posts: # POSTS
         for i in range(55):
             st.markdown('<div class="post-card">', unsafe_allow_html=True)
             img, cap = activity_content[i % len(activity_content)]
@@ -144,7 +143,7 @@ with col_right:
                 st.rerun()
             st.markdown('</div>', unsafe_allow_html=True)
 
-    with tab2: # PHOTO GALLERY (Includes image(1).png)
+    with tab2: # PHOTO GALLERY
         st.markdown('<div class="section-header">Target Day Gallery</div>', unsafe_allow_html=True)
         if st.session_state.photo_index is None:
             cols = st.columns(3)
@@ -162,7 +161,7 @@ with col_right:
                 st.session_state.photo_index = None
                 st.rerun()
 
-    with tab3: # BOOKING (August 4-11)
+    with tab3: # BOOKING
         st.markdown('<div class="section-header">Target Day Booking - £54.99</div>', unsafe_allow_html=True)
         dt = st.selectbox("Select Date (August 4th-11th):", ["4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th"])
         if st.button("Reserve Ticket"):
@@ -172,10 +171,10 @@ with col_right:
     with tab5: # FAQs
         st.markdown('<div class="section-header">Frequently Asked Questions</div>', unsafe_allow_html=True)
         faqs = [
-            ("What is Target Day?", "A premier multi-activity event featuring axe throwing, airsoft, and tactical laser tag."),
-            ("What is the cost?", "The flat rate is £54.99 per person, covering all activities and gear."),
-            ("Where is the site?", "All events are held at Stouthall Country Mansion, Swansea."),
-            ("What are the dates?", "Booking is open exclusively for August 4th to August 11th, 2026.")
+            ("What is Target Day?", "A multi-activity tactical event at Stouthall Mansion."),
+            ("What is the cost?", "£54.99 all-inclusive per person."),
+            ("When is it?", "August 4th - August 11th, 2026.")
         ]
         for q, a in faqs:
             st.markdown(f'<span class="faq-q">{q}</span><span>{a}</span>', unsafe_allow_html=True)
+            
